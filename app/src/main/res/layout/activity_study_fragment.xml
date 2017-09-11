@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		xmlns:tools="http://schemas.android.com/tools"
+		android:id="@+id/containerStudy"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:fitsSystemWindows="true"
+		tools:context="testlearn.shanxue.edu.shanxue01.study.StudyFragment">
+
+
+
+
+		<android.support.design.widget.AppBarLayout
+
+				android:id="@+id/app_bar"
+				android:fitsSystemWindows="true"
+				android:layout_height="@dimen/app_bar_height"
+				android:layout_width="match_parent"
+				android:theme="@style/AppTheme.AppBarOverlay">
+			<android.support.design.widget.CollapsingToolbarLayout
+					android:id="@+id/toolbar_layout"
+					android:fitsSystemWindows="true"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					app:title=""
+					android:minHeight="50dp"
+					android:background="@drawable/rain_girl"
+					app:expandedTitleMarginEnd="64dp"
+					app:expandedTitleMarginStart="48dp"
+					app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
+					app:contentScrim="?attr/colorPrimary">
+				<android.support.v7.widget.Toolbar
+						android:id="@+id/toolbar"
+						android:layout_height="?attr/actionBarSize"
+						android:layout_width="match_parent"
+						android:background="@color/colorTransparent"
+						app:layout_collapseMode="pin"
+						app:popupTheme="@style/AppTheme.PopupOverlay">
+					<LinearLayout android:layout_width="wrap_content"
+								  android:layout_height="wrap_content"
+								  android:orientation="horizontal"
+					>
+						<ImageButton android:layout_width="wrap_content"
+									 android:layout_height="wrap_content"
+									 android:id="@+id/btnStopStudy"
+									 android:background="@color/colorTransparent"
+									 android:src="@drawable/ic_arrow_back"/>
+						<TextView android:layout_width="wrap_content"
+								  android:layout_height="match_parent"
+								  android:gravity="center"
+								  android:layout_marginLeft="15dp"
+								  android:layout_marginBottom="0dp"
+								  android:textSize="18dp"
+								  android:text="退出"
+								  android:id="@+id/tvStopStudy"
+								  android:textColor="@color/cardview_light_background"
+								  android:textAlignment="center"/>
+					</LinearLayout>
+				</android.support.v7.widget.Toolbar>
+			</android.support.design.widget.CollapsingToolbarLayout>
+		</android.support.design.widget.AppBarLayout>
+
+		<include layout="@layout/content_study_fragment"
+		/>
+
+
+
+
+	<android.support.design.widget.FloatingActionButton
+			android:id="@+id/fab"
+			android:layout_width="55dp"
+			android:layout_height="55dp"
+			android:layout_margin="@dimen/fab_margin"
+			app:layout_anchor="@id/app_bar"
+			app:layout_anchorGravity="bottom|right|end"
+			app:srcCompat="@drawable/ic_like_before"
+			app:backgroundTint="@color/colorTransparent"
+			app:rippleColor="@color/colorTransparent"
+			app:elevation="0dp"
+			tools:layout_editor_absoluteY="209dp"
+			android:layout_marginRight="92dp"
+			app:layout_constraintRight_toRightOf="parent"/>
+
+
+</android.support.design.widget.CoordinatorLayout>

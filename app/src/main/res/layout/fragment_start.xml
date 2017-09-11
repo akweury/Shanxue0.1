@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:orientation="vertical"
+			  android:background="@color/colorWhite"
+			  android:layout_width="match_parent"
+			  android:layout_height="match_parent">
+
+
+
+
+
+	<LinearLayout android:layout_width="match_parent"
+				  android:layout_height="wrap_content"
+				  android:orientation="horizontal">
+		<SearchView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:queryHint="搜索词条..."
+		/>
+
+
+	</LinearLayout>
+
+	<LinearLayout android:layout_width="wrap_content"
+				  android:layout_height="wrap_content"
+				  android:layout_gravity="center"
+				  android:orientation="vertical"
+				  android:layout_weight="7"
+				  android:id="@+id/recommond">
+
+		<!--<TextView android:layout_width="match_parent"-->
+				  <!--android:layout_height="wrap_content"-->
+				  <!--android:text="@string/recommond_heading"-->
+				  <!--android:gravity="center"-->
+				  <!--android:textSize="27sp"-->
+				  <!--android:textStyle="bold"-->
+				  <!--android:textColor="@color/colorAccent"-->
+				  <!--android:id="@+id/textView2"/>-->
+
+		<TextView android:layout_width="wrap_content"
+				  android:textSize="18dp"
+				  android:gravity="center"
+				  android:layout_gravity="center"
+				  android:layout_height="wrap_content"
+				  android:layout_weight="1.5"
+				  android:text="@string/recommond_detail"
+				  android:id="@+id/textView"
+				  android:textColor="@color/colorAccent"/>
+		<TextView android:layout_width="match_parent"
+				  android:layout_height="wrap_content"
+				  android:layout_marginRight="10dp"
+				  android:gravity="right"
+				  android:layout_weight="0.5"
+				  android:layout_gravity="center"
+				  android:id="@+id/tvRecommendAuthor"
+				  android:text="@string/recommond_author"/>
+	</LinearLayout>
+
+
+	<ImageView
+			android:layout_gravity="center"
+			android:layout_width="330dp"
+			android:layout_height="1dp"
+			android:background="@color/colorPrimary"
+	/>
+
+
+	<LinearLayout android:layout_width="match_parent"
+				  android:layout_height="wrap_content"
+				  android:layout_weight="3"
+				  android:orientation="vertical">
+
+
+		<LinearLayout android:layout_width="match_parent"
+					  android:layout_height="wrap_content"
+					  android:layout_weight="1"
+					  android:gravity="center"
+					  android:id="@+id/punch_card_pannel"
+					  android:orientation="vertical">
+			<TextView android:layout_width="match_parent"
+					  android:layout_height="wrap_content"
+					  android:gravity="bottom"
+					  android:textSize="56sp"
+					  android:layout_weight="1.5"
+					  android:text="@string/punch_card_number"
+					  android:textStyle="bold"
+					  android:textAlignment="center"
+					  android:textColor="@android:color/holo_green_light"/>
+			<TextView android:layout_width="match_parent"
+					  android:layout_height="wrap_content"
+					  android:gravity="top"
+					  android:layout_weight="1"
+					  android:textSize="16sp"
+					  android:text="@string/punch_card_string"
+					  android:textAlignment="center"
+					  android:id="@+id/textView3"/>
+		</LinearLayout>
+
+		<ImageView
+				android:layout_gravity="center"
+				android:layout_width="match_parent"
+				android:layout_height="3dp"
+				android:background="?attr/colorButtonNormal"
+		/>
+		<ImageView
+				android:layout_gravity="center"
+				android:layout_width="match_parent"
+				android:layout_height="18dp"
+				android:background="@android:color/background_light"
+		/>
+		<LinearLayout android:layout_width="330dp"
+					  android:layout_gravity="center"
+					  android:layout_weight="0.8"
+					  android:layout_height="wrap_content"
+					  android:id="@+id/learn_info_Panel"
+		>
+			<LinearLayout
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:orientation="vertical"
+					android:padding="5dp"
+					android:layout_weight="1">
+
+				<TextView android:layout_width="match_parent"
+						  android:layout_height="wrap_content"
+						  android:text="200"
+						  android:gravity="center"
+						  android:textSize="30sp"
+						  android:textStyle="bold"
+						  android:id="@+id/tvNewEntryNum"
+						  android:textColor="@color/colorAccent"
+						  android:fontFamily="sans-serif-condensed"/>
+				<TextView
+						android:text="新词条"
+						android:gravity="center"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:id="@+id/tvNewEntryString"
+						android:textSize="12sp"
+						android:textStyle="bold"
+						android:textColor="@color/colorAccent"/>
+
+			</LinearLayout>
+
+
+			<LinearLayout
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:orientation="vertical"
+					android:padding="5dp"
+					android:layout_weight="1">
+
+				<TextView android:layout_width="match_parent"
+						  android:layout_height="wrap_content"
+						  android:text="697"
+						  android:gravity="center"
+						  android:textSize="30sp"
+						  android:textStyle="bold"
+						  android:id="@+id/tvTodayEntryNum"
+						  android:textColor="@color/colorAccent" android:fontFamily="sans-serif-condensed"/>
+				<TextView
+						android:text="今日词条"
+						android:gravity="center"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:id="@+id/tvTodayEntryString"
+						android:textSize="12sp"
+						android:textStyle="bold"
+						android:textColor="@color/colorAccent"/>
+
+			</LinearLayout>
+
+
+			<LinearLayout
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:padding="5dp"
+					android:orientation="vertical"
+					android:layout_weight="1">
+
+				<TextView android:layout_width="match_parent"
+						  android:layout_height="wrap_content"
+						  android:text="122"
+						  android:gravity="center"
+						  android:textSize="30sp"
+						  android:textStyle="bold"
+						  android:id="@+id/tvSurplusNum"
+						  android:textColor="@color/colorAccent" android:fontFamily="sans-serif-condensed"/>
+				<TextView
+						android:text="剩余词条"
+						android:gravity="center"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:id="@+id/tvSurplusString"
+						android:textSize="12sp" android:textStyle="bold"
+						android:textColor="@color/colorAccent"/>
+
+			</LinearLayout>
+
+
+			<LinearLayout
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:orientation="vertical"
+					android:padding="5dp"
+					android:layout_weight="1">
+
+				<TextView android:layout_width="match_parent"
+						  android:layout_height="wrap_content"
+						  android:text="122"
+						  android:gravity="center"
+						  android:textSize="30sp"
+						  android:textStyle="bold"
+						  android:id="@+id/tvMyEntryNum"
+						  android:textColor="@color/colorAccent" android:fontFamily="sans-serif-condensed"/>
+				<TextView
+						android:text="已学词条"
+						android:gravity="center"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:id="@+id/tvMyEntryString"
+						android:textSize="12sp" android:textStyle="bold"
+						android:textColor="@color/colorAccent"/>
+
+			</LinearLayout>
+
+		</LinearLayout>
+
+
+	</LinearLayout>
+
+	<ImageView
+			android:layout_gravity="center"
+			android:layout_width="match_parent"
+			android:layout_height="3dp"
+			android:background="?attr/colorButtonNormal"
+	/>
+
+	<ImageView
+			android:layout_gravity="center"
+			android:layout_width="match_parent"
+			android:layout_height="15dp"
+			android:background="@android:color/background_light"
+	/>
+
+
+	<LinearLayout android:layout_width="300dp"
+				  android:layout_height="60dp"
+				  android:id="@+id/start_study_pannel"
+				  android:layout_gravity="center"
+				  android:background="@drawable/round_rect_shape"
+				  android:gravity="center"
+	>
+		<Button
+				android:text="开始学习"
+				android:layout_width="match_parent"
+				android:layout_height="60dp"
+				android:padding="20dp"
+				android:backgroundTint="@android:color/transparent"
+				android:textColor="@color/colorPrimary"
+
+				android:id="@+id/btn2StartStudy"
+				android:textStyle="bold"
+				android:textSize="15sp"
+				android:background="@android:color/transparent"
+				android:elevation="0dp"/>
+	</LinearLayout>
+
+	<ImageView
+			android:layout_weight="1.5"
+			android:layout_gravity="center"
+			android:layout_width="153dp"
+			android:layout_height="1dp"
+			android:background="#ffffff"
+			android:adjustViewBounds="true" android:id="@+id/imageView"/>
+
+
+</LinearLayout>
