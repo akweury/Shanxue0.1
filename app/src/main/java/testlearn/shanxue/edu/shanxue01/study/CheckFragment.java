@@ -104,13 +104,22 @@ public class CheckFragment extends Fragment implements Serializable, View.OnClic
     }
 
     private void splitRhesis() {
+
         rhesisSplit = studyNodeModelList.get(surplus).getRhesis_sentance().split("，|。|？|\n");
         List<String> list = new ArrayList<String>();
+
+
+
         for (String string : rhesisSplit) {
-            if (string != null && string.length() > 0) {
+            if (string != null && string.length() > 0 && !string.contains("\\n")) {
                 list.add(string);
             }
         }
+
+        for (int i = 0; i < rhesisSplit.length; i++) {
+            Log.i(TAG, "去掉空值前，背诵名句为: " + rhesisSplit[i]);
+        }
+
         rhesisSplit = list.toArray(new String[list.size()]);
 
         for (int i = 0; i < rhesisSplit.length; i++) {

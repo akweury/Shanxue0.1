@@ -6,7 +6,7 @@ public class UserLearnRecordModel implements Serializable{
     private String study_ID;
     private String study_item_ID;
     private String ID;
-    private String study_creatorDate;
+    private String study_createDateTime;
     private int study_node;
     private String study_nextDateTime;
     private String study_latestStudyTime;
@@ -35,12 +35,12 @@ public class UserLearnRecordModel implements Serializable{
         this.ID = ID;
     }
 
-    public String getStudy_creatorDate() {
-        return study_creatorDate;
+    public String getStudy_createDateTime() {
+        return study_createDateTime;
     }
 
-    public void setStudy_creatorDate(String study_creatorDate) {
-        this.study_creatorDate = study_creatorDate;
+    public void setStudy_createDateTime(String study_createDateTime) {
+        this.study_createDateTime = study_createDateTime;
     }
 
     public int getStudy_node() {
@@ -79,7 +79,7 @@ public class UserLearnRecordModel implements Serializable{
         this.study_ID = studyNodeModel.getStudy_ID();
         this.ID = studyNodeModel.getID();
         this.study_item_ID = studyNodeModel.getStudy_item_ID();
-        this.study_creatorDate = studyNodeModel.getStudy_creatorDate();
+        this.study_createDateTime = studyNodeModel.getStudy_creatorDate();
         this.study_node = studyNodeModel.getStudy_node();
         this.study_nextDateTime = studyNodeModel.getStudy_nextDateTime();
         this.study_latestStudyTime = studyNodeModel.getStudy_latestStudyTime();

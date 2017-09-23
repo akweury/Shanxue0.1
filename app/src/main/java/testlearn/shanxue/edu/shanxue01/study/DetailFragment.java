@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import testlearn.shanxue.edu.shanxue01.R;
+import testlearn.shanxue.edu.shanxue01.control.DataUtil;
 import testlearn.shanxue.edu.shanxue01.control.FileUtil;
 import testlearn.shanxue.edu.shanxue01.models.StudyNodeModel;
 import testlearn.shanxue.edu.shanxue01.models.UserLearnRecordModel;
@@ -22,6 +23,14 @@ import testlearn.shanxue.edu.shanxue01.models.UserLearnRecordModel;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+//import org.apache.http.HttpResponse;
+//import org.apache.http.client.HttpClient;
+//import org.apache.http.client.methods.HttpPost;
+//import org.apache.http.entity.StringEntity;
+//import org.apache.http.impl.client.DefaultHttpClient;
+//import org.json.JSONObject;
+
 
 public class DetailFragment extends Fragment implements Serializable, View.OnClickListener {
     private static final String TAG = "DetialFragment";
@@ -101,14 +110,20 @@ public class DetailFragment extends Fragment implements Serializable, View.OnCli
 
 
 
-        textSplit = studyNodeModelList.get(surplus).getRhesis_text().split("(?<=。)|(?<=？)|(?<=！)|(?=\n)|(?=\r)");
+        textSplit = studyNodeModelList.get(surplus).getRhesis_text().split("((?<=。)|(?<=？)|(?<=！)|(?=\n)|(?=\r))");
         //remove null
         List<String> list = new ArrayList<String>();
         for (String string : textSplit){
-            if(string !=null && string.length()>0){
+            if(string !=null && string.length()>0 && !string.contains("\\n")){
+
                 list.add(string);
             }
         }
+
+        for(int i = 0;i<textSplit.length;i++){
+            Log.i(TAG,"去掉空值前，一句分别为: " + textSplit[i]);
+        }
+
         textSplit = list.toArray(new String[list.size()]);
 
         for(int i = 0;i<textSplit.length;i++){
@@ -125,7 +140,7 @@ public class DetailFragment extends Fragment implements Serializable, View.OnCli
             a.setTextSize(17);
             a.setGravity(Gravity.CENTER);
             a.setScaleX((float) 1.1);
-            a.setText(textSplit[i]);
+            a.setText(textSplit[i] + "\n");
             a.setId(i);
             if(textSplit[i].contains(sentence)){
                 a.setTextColor(resources.getColorStateList(R.color.colorPink));
@@ -238,7 +253,7 @@ public class DetailFragment extends Fragment implements Serializable, View.OnCli
 
                 userLearnRecordModelList.add(userLearnRecordModel);
                 Log.i(TAG, "study_id: " + userLearnRecordModelList.get(i).getStudy_ID());
-                Log.i(TAG, "creatorDate: " + userLearnRecordModelList.get(i).getStudy_creatorDate());
+                Log.i(TAG, "creatorDate: " + userLearnRecordModelList.get(i).getStudy_createDateTime());
                 Log.i(TAG, "latestStudyTime: " + userLearnRecordModelList.get(i).getStudy_latestStudyTime());
                 Log.i(TAG, "nextDateTime: " + userLearnRecordModelList.get(i).getStudy_nextDateTime());
                 Log.i(TAG, "studyNode: " + userLearnRecordModelList.get(i).getStudy_node());
@@ -247,8 +262,15 @@ public class DetailFragment extends Fragment implements Serializable, View.OnCli
 
             //back to startstudy.activity
             //https://stackoverflow.com/questions/4038479/android-go-back-to-previous-activity
-            FileUtil.writeObj2File(userLearnRecordModelList,FileUtil.FILE_NAME_USER_LEARN_RECORD);
+            FileUtil.writeObj2File(userLearnRecordModelList,FileUtil.FILE_NAME_UPLOAD_LEARN_RECORD);
+            Log.i(TAG,"上传用户学习记录...");
+
+
+
+            DataUtil.uploadData(userLearnRecordModelList);
             getActivity().finish();
         }
     }
+
+
 }

@@ -42,7 +42,7 @@ public class StudyNodeModel implements Serializable {
     private String study_latestStudyTime;
     private int hasStudyed;
 
-    private DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public String getRhesis_ID() {
         return rhesis_ID;
@@ -296,7 +296,7 @@ public class StudyNodeModel implements Serializable {
         this.study_ID = userLearnRecordModel.getStudy_ID();
         this.ID = userLearnRecordModel.getID();
         this.study_item_ID = userLearnRecordModel.getStudy_item_ID();
-        this.study_creatorDate = userLearnRecordModel.getStudy_creatorDate();
+        this.study_creatorDate = userLearnRecordModel.getStudy_createDateTime();
         this.study_node = userLearnRecordModel.getStudy_node();
         this.study_nextDateTime = userLearnRecordModel.getStudy_nextDateTime();
         this.study_latestStudyTime = userLearnRecordModel.getStudy_latestStudyTime();
