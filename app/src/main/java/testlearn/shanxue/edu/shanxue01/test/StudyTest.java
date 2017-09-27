@@ -90,4 +90,16 @@ public class StudyTest {
         Log.i(TAG,"rhesis_difficulty: " + rhesisModel.getRhesis_difficulty());
         Log.i(TAG,"rhesis_like_number: " + rhesisModel.getRhesis_like_number());
     }
+
+    public static void testNextTimeLearnRecord(UserLearnRecordModel userLearnRecordModel){
+        Log.i(TAG,"study_ID: " + userLearnRecordModel.getStudy_ID());
+        Log.i(TAG,"nextStudyTime: " + userLearnRecordModel.getStudy_nextDateTime());
+    }
+
+    public static void textNextTimeLearnRecordList(List<UserLearnRecordModel> userLearnRecordModelList){
+        for(int i = 0; i<userLearnRecordModelList.size();i++){
+            Log.i(TAG,"study_ID: " + userLearnRecordModelList.get(i).getStudy_ID());
+            Log.i(TAG,"nextStudyTime: " + userLearnRecordModelList.get(i).getStudy_nextDateTime());
+        }
+    }
 }

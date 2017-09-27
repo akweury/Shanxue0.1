@@ -294,6 +294,7 @@ public class StudyNodeModel implements Serializable {
 
     public void setUserLearnRecordPart(UserLearnRecordModel userLearnRecordModel) {
         this.study_ID = userLearnRecordModel.getStudy_ID();
+        this.book_ID = userLearnRecordModel.getBook_ID();
         this.ID = userLearnRecordModel.getID();
         this.study_item_ID = userLearnRecordModel.getStudy_item_ID();
         this.study_creatorDate = userLearnRecordModel.getStudy_createDateTime();

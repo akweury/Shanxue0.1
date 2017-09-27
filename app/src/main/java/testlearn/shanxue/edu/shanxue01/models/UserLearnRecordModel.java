@@ -11,6 +11,16 @@ public class UserLearnRecordModel implements Serializable{
     private String study_nextDateTime;
     private String study_latestStudyTime;
     private int hasStudyed;
+    private String book_ID;
+
+    public String getBook_ID() {
+        return book_ID;
+    }
+
+    public void setBook_ID(String book_ID) {
+        this.book_ID = book_ID;
+    }
+
     public String getStudy_ID() {
         return study_ID;
     }
@@ -78,6 +88,7 @@ public class UserLearnRecordModel implements Serializable{
     public void setUserLearnRecord(StudyNodeModel studyNodeModel) {
         this.study_ID = studyNodeModel.getStudy_ID();
         this.ID = studyNodeModel.getID();
+        this.book_ID = studyNodeModel.getBook_ID();
         this.study_item_ID = studyNodeModel.getStudy_item_ID();
         this.study_createDateTime = studyNodeModel.getStudy_creatorDate();
         this.study_node = studyNodeModel.getStudy_node();

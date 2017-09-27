@@ -24,13 +24,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-//import org.apache.http.HttpResponse;
-//import org.apache.http.client.HttpClient;
-//import org.apache.http.client.methods.HttpPost;
-//import org.apache.http.entity.StringEntity;
-//import org.apache.http.impl.client.DefaultHttpClient;
-//import org.json.JSONObject;
-
 
 public class DetailFragment extends Fragment implements Serializable, View.OnClickListener {
     private static final String TAG = "DetialFragment";
@@ -266,8 +259,14 @@ public class DetailFragment extends Fragment implements Serializable, View.OnCli
             Log.i(TAG,"上传用户学习记录...");
 
 
+            FileUtil.writeObj2File(userLearnRecordModelList,FileUtil.FILE_NAME_USER_LEARN_RECORD);
 
-            DataUtil.uploadData(userLearnRecordModelList);
+            String json_LearnRecords = DataUtil.transLearnRecords2Json(userLearnRecordModelList);
+
+            Log.i(TAG,"json_LearnRecords: " + json_LearnRecords);
+
+            DataUtil.sendPost("learn_record",json_LearnRecords,FileUtil.URL_UPLOAD_LEARN_RECORD,getActivity());
+
             getActivity().finish();
         }
     }

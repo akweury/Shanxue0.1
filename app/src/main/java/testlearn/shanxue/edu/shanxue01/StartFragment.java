@@ -2,7 +2,6 @@ package testlearn.shanxue.edu.shanxue01;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,18 +9,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.google.gson.Gson;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.widget.Toast;
 import testlearn.shanxue.edu.shanxue01.control.DataUtil;
 import testlearn.shanxue.edu.shanxue01.control.FileUtil;
+import testlearn.shanxue.edu.shanxue01.control.OnDataResponseListener;
 import testlearn.shanxue.edu.shanxue01.models.*;
 import testlearn.shanxue.edu.shanxue01.study.InStudy;
 import testlearn.shanxue.edu.shanxue01.test.StudyTest;
 
 import java.io.File;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,33 +25,19 @@ public class StartFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "StartFragment";
 
     private int surplus;
-    private boolean finishJsonLoad = false;
     private ProgressDialog dialog;
     private Intent intentActivity;
     private boolean hasClicked = false;
 
-    private JsonModel jsonModel;
-    private List<RhesisModel> rhesisModelList;
-    private UserInfoModle userInfoModle;
-    private List<UserLearnRecordModel> userLearnRecordModelList;
+    public JsonModel jsonModel;
+    public List<RhesisModel> rhesisModelList;
+    public UserInfoModle userInfoModle;
+    public List<UserLearnRecordModel> userLearnRecordModelList;
+
     private List<StudyNodeModel> studyNodeModelList = new ArrayList<StudyNodeModel>();
     private boolean hasClear = false;
 
-    private int ID=1;
-    private int book_ID=1;
-    private int study_num=4;
-
-    public void setSurplus(int surplus) {
-        this.surplus = surplus;
-    }
-
-    public void setRhesisModelList(List<RhesisModel> rhesisModelList) {
-        this.rhesisModelList = rhesisModelList;
-    }
-
-    public List<RhesisModel> getRhesisModelList() {
-        return rhesisModelList;
-    }
+    private String json_learn;
 
 
     @Override
@@ -81,12 +63,8 @@ public class StartFragment extends Fragment implements View.OnClickListener {
         initFolder(FileUtil.FOLDER_URL);
 
         Log.i(TAG, "初始用户信息...");
-        initFile(FileUtil.FILE_URL_USER);
-//        Log.i(TAG, "初始词条信息...");
-//        initFile(FileUtil.FILE_URL_RHESIS);
-//
-//        Log.i(TAG, "初始学习纪录信息...");
-//        initFile(FileUtil.FILE_URL_USER_LEARN_RECORD);
+        initFile();
+
         Log.i(TAG, "init()执行完毕");
 
 
@@ -103,8 +81,23 @@ public class StartFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    private void initFile() {
+//        File file = new File(FILE_URL);
+
+//        if (!file.exists()) {
+//
+//            Log.i(TAG, "信息不存在，下载信息（Json）文件" + "信息存储在本地");
+//            initLearnInfo();
+//        } else {
+//            Log.i(TAG, "文件已存在, " + "文件名为" + file.getName() + "absolute path: " + file.getAbsolutePath());
+//        }
+
+        initLearnInfo();
+
+    }
+
     private void initFileForce(){
-        Log.i(TAG,"录入用户信息失败，强制更新用户信息！");
+        Log.i(TAG,"强制更新用户信息！");
         File file = new File(FileUtil.FILE_URL_RHESIS);
         if(file.exists())
             file.delete();
@@ -117,55 +110,53 @@ public class StartFragment extends Fragment implements View.OnClickListener {
         file = new File(FileUtil.FILE_URL_UPLOAD_LEARN_RECORD);
         if(file.exists())
             file.delete();
-        JSONTask jsonTask = new JSONTask();
-        jsonTask.execute(FileUtil.URL_USERS + "?ID=" + ID + "&book_ID=" + book_ID + "&study_num=" + study_num);
+
+
+        initLearnInfo();
+
+
+//        JSONTask jsonTask = new JSONTask();
+//        jsonTask.execute(FileUtil.URL_USERS + "?ID=" + ID + "&book_ID=" + book_ID + "&study_num=" + study_num);
     }
 
-    private void initFile(String FILE_URL) {
-        File file = new File(FILE_URL);
+    private void initLearnInfo() {
+        int study_num = 4;
+        int book_ID = 1;
+        int ID = 1;
+        DataUtil.sendGet(FileUtil.URL_USERS + "?ID=" + ID + "&book_ID=" + book_ID + "&study_num=" + study_num, getActivity(), new OnDataResponseListener() {
+            @Override
+            public void onResponse(String data) {
+                json_learn = data;
+                setData();
+            }
+        });
 
-        if (!file.exists()) {
 
-            Log.i(TAG, "信息不存在，下载信息（Json）文件" + "信息存储在本地");
-            JSONTask jsonTask = new JSONTask();
-            jsonTask.execute(FileUtil.URL_USERS + "?ID=" + ID + "&book_ID="+ book_ID + "&study_num=" + study_num);
-            //download,saving information to object
-//            if (FILE_URL == FileUtil.FILE_URL_USER) {
-//                //https://stackoverflow.com/questions/3075009/android-how-can-i-pass-parameters-to-asynctasks-onpreexecute
-//                JSONTaskUserInfo jsonTaskUserInfo = new JSONTaskUserInfo();
-//
-//                jsonTaskUserInfo.execute(FileUtil.URL_USERS);
-////                jsonTaskUserInfo.execute(FileUtil.URL_USERS + "?ID=" + ID);
-//
-//                new JSONTaskUserInfo().execute(FileUtil.URL_USERS);
-//            } else if (FILE_URL == FileUtil.FILE_URL_RHESIS) {
-//                //?ID=1&book_ID=1&study_num=14
-//                JSONTaskRhesis jsonTaskRhesis = new JSONTaskRhesis();
-//
-//                jsonTaskRhesis.execute(FileUtil.URL_RHESIS);
-////                jsonTaskRhesis.execute(FileUtil.URL_RHESIS + "?ID=" + ID + "&book_ID="+book_ID + "&study_num=" + study_num);
-//
-//                new JSONTaskRhesis().execute(FileUtil.URL_RHESIS);
-//            } else if (FILE_URL == FileUtil.FILE_URL_USER_LEARN_RECORD) {
-//                JSONTaskStudyNode jsonTaskStudyNode = new JSONTaskStudyNode();
-//
-//                jsonTaskStudyNode.execute(FileUtil.URL_USER_LEARN_RECORD);
-////                jsonTaskStudyNode.execute(FileUtil.URL_USER_LEARN_RECORD + "?ID=" + ID + "&book_ID="+book_ID + "&study_num=" + study_num);
-//
-//                new JSONTaskStudyNode().execute(FileUtil.URL_USER_LEARN_RECORD);
-//            }
-        } else {
-            Log.i(TAG, "文件已存在, " + "文件名为" + file.getName() + "absolute path: " + file.getAbsolutePath());
+    }
+
+    private void setData(){
+
+        Log.i(TAG,"json_learn: " + json_learn);
+
+        if(json_learn != null){
+            jsonModel = DataUtil.json2LearnPackage(json_learn);
+            userInfoModle = jsonModel.getUserInfoModle();
+            rhesisModelList = jsonModel.getRhesisModelList();
+            userLearnRecordModelList = jsonModel.getUserLearnRecordModelList();
+
+
+        }else{
+            Toast.makeText(getActivity(),"get learn record failed!",Toast.LENGTH_SHORT).show();
+            Log.i(TAG,"can't get json from internet...");
+
         }
-
-        return;
-
 
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
 
 
         View view = inflater.inflate(R.layout.fragment_start, container, false);
@@ -185,6 +176,7 @@ public class StartFragment extends Fragment implements View.OnClickListener {
     public void onResume() {
         super.onResume();
         Log.i(TAG, "onResume");
+        init();
 
     }
 
@@ -211,11 +203,15 @@ public class StartFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
 
+        StudyTest.textNextTimeLearnRecordList(userLearnRecordModelList);
 
-        if (hasClicked == true){
+
+        if (hasClicked){
             Log.i(TAG,"重新生成intentActivity");
+
             intentActivity = new Intent(getActivity(), InStudy.class);
-            init();
+
+            initFileForce();
         }
         switch (view.getId()) {
             case R.id.btn2StartStudy:
@@ -223,24 +219,17 @@ public class StartFragment extends Fragment implements View.OnClickListener {
                 //https://stackoverflow.com/questions/3818745/androidruntime-error-parcel-unable-to-marshal-value
                 Log.i(TAG, "开始读取信息...");
 
+                initFileForce();
 
-                try{
-
-                    //load data
-                    setRhesisModelList((List<RhesisModel>) DataUtil.loadData(FileUtil.FILE_NAME_RHESIS));
-                    userInfoModle = (UserInfoModle) DataUtil.loadData(FileUtil.FILE_NAME_USER);
-                    userLearnRecordModelList = (List<UserLearnRecordModel>) DataUtil.loadData(FileUtil.FILE_NAME_USER_LEARN_RECORD);
-                    Log.i(TAG,"study_id check----------" + userLearnRecordModelList.get(0).getStudy_ID());
-                }catch (Exception e){
-                    initFileForce();
-                }
-
-
-                if (getRhesisModelList() != null && userInfoModle.getNickName() != null && userLearnRecordModelList.get(0).getStudy_nextDateTime() != null) {
+                if (rhesisModelList != null && userInfoModle.getNickName() != null && userLearnRecordModelList.get(0).getStudy_nextDateTime() != null) {
                     Log.i(TAG, "学习--所需信息检查正常");
                 }
 
-                surplus = rhesisModelList.size();
+                if (rhesisModelList != null) {
+                    surplus = rhesisModelList.size();
+                }else {
+                    Toast.makeText(getActivity(),"0 rhesis!",Toast.LENGTH_SHORT).show();
+                }
 
                 Log.i(TAG,"userLearnRecordModelList size is: " + userLearnRecordModelList.size());
                 Log.i(TAG,"rhesisModelList size is: " + rhesisModelList.size());
@@ -252,8 +241,6 @@ public class StartFragment extends Fragment implements View.OnClickListener {
 
                 Bundle bundle = new Bundle();
                 bundle.putInt("surplus", surplus);
-//                bundle.putSerializable("rhesisModelList", (ArrayList) rhesisModelList);
-//                bundle.putSerializable("studyNodeModelList", (ArrayList) userLearnRecordModelList);
                 bundle.putSerializable("userinfo", userInfoModle);
                 bundle.putSerializable("studyNodeList", (ArrayList) studyNodeModelList);
                 intentActivity.putExtras(bundle);
@@ -278,11 +265,13 @@ public class StartFragment extends Fragment implements View.OnClickListener {
             StudyNodeModel studyNodeModel = new StudyNodeModel();
 
             studyNodeModel.setRhesisPart(rhesisModelList.get(i));
+
+            studyNodeModel.setID(userInfoModle.getID());
             if (i < userLearnRecordModelList.size()) {
                 studyNodeModel.setUserLearnRecordPart(userLearnRecordModelList.get(i));
                 Log.i(TAG, "词条 + 学习信息 合并！");
                 Log.i(TAG,"study_Node+++++++++++++++++++" + userLearnRecordModelList.get(i).getStudy_node());
-                if(hasClicked == true){
+                if(hasClicked){
                     Log.i(TAG,"重新开始，进行更新学习内容！");
                     studyNodeModel.updateUserLearnRecordPart(userLearnRecordModelList.get(i));
                     Log.i(TAG,"study_Node================" + studyNodeModel.getStudy_node());
@@ -293,13 +282,12 @@ public class StartFragment extends Fragment implements View.OnClickListener {
             }
 
 
-            if(hasClear==false && hasClicked ==true){
+            if(!hasClear && hasClicked){
                 studyNodeModelList.clear();
                 hasClear = true;
             }
             studyNodeModelList.add(studyNodeModel);
             Log.i(TAG,"studoNodeModeList size is " + studyNodeModelList.size());
-            //TODO:init study_ID in database...maybe
             Log.i(TAG, "node-----------------: " + studyNodeModelList.get(i).getStudy_node());
             Log.i(TAG, "creatorDate: " + studyNodeModelList.get(i).getStudy_creatorDate());
             Log.i(TAG, "latestStudyTime: " + studyNodeModelList.get(i).getStudy_latestStudyTime());
@@ -310,100 +298,9 @@ public class StartFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    public class JSONTask extends AsyncTask<String, String, JsonModel> implements Serializable {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            Log.i(TAG, "json onPreExecute");
-        }
-
-        @Override
-        protected void onPostExecute(JsonModel result) {
-            super.onPostExecute(jsonModel);
-            userInfoModle = result.getUserInfoModle();
-            rhesisModelList = result.getRhesisModelList();
-            userLearnRecordModelList = result.getUserLearnRecordModelList();
-
-            finishJsonLoad = true;
-        }
-
-        @Override
-        protected JsonModel doInBackground(String... urls) {
-
-            try {
-                Log.i(TAG, "开始下载json文件...");
-
-                String finalJson = DataUtil.downloadJson(urls);
-                Log.i(TAG, "用户Json文件下载完毕！");
 
 
-                Log.i(TAG,"json数据包内容为：" + finalJson);
-
-                JSONObject parentObject = new JSONObject(finalJson);
-                JSONObject jsonObject = parentObject.getJSONObject("result");
-
-                JSONArray rhesisArray = jsonObject.getJSONArray("rhesis");
-                JSONArray learn_record = jsonObject.getJSONArray("learn_record");
-                JSONObject user_info = jsonObject.getJSONObject("user_info");
-
-                UserInfoModle userInfoModle = new UserInfoModle();
-                List<UserLearnRecordModel> userLearnRecordModelList = new ArrayList<>();
-                List<RhesisModel> rhesisModelList = new ArrayList<>();
-
-
-                Gson gson = new Gson();
-
-
-                for (int i = 0; i < learn_record.length(); i++) {
-                    JSONObject finalObject = learn_record.getJSONObject(i);
-                    UserLearnRecordModel userLearnRecordModel = gson.fromJson(finalObject.toString(), UserLearnRecordModel.class);
-                    userLearnRecordModelList.add(userLearnRecordModel);
-                }
-
-                for (int i = 0; i < rhesisArray.length(); i++) {
-                    JSONObject finalObject = rhesisArray.getJSONObject(i);
-                    RhesisModel rhesisModel = gson.fromJson(finalObject.toString(), RhesisModel.class);
-                    rhesisModelList.add(rhesisModel);
-                }
-
-                userInfoModle = gson.fromJson(user_info.toString(),UserInfoModle.class);
-
-                Log.i(TAG,"userInfoModel nickname: " + userInfoModle.getNickName());
-                Log.i(TAG,"userLearnRecordlist size: " + userLearnRecordModelList.size());
-                Log.i(TAG,"rhesisModel size: " + rhesisModelList.size());
-
-                jsonModel = new JsonModel();
-                jsonModel.setUserInfoModle(userInfoModle);
-                jsonModel.setRhesisModelList(rhesisModelList);
-                jsonModel.setUserLearnRecordModelList(userLearnRecordModelList);
-
-                FileUtil.writeObj2File(userInfoModle, FileUtil.FILE_NAME_USER);
-                FileUtil.writeObj2File(userLearnRecordModelList, FileUtil.FILE_NAME_USER_LEARN_RECORD);
-                FileUtil.writeObj2File(rhesisModelList, FileUtil.FILE_NAME_RHESIS);
-                Log.i(TAG, "个人信息储存完毕！");
-
-                Log.i(TAG,"开始信息测试...");
-                StudyTest.testModel(userInfoModle);
-                for (UserLearnRecordModel userLearnRecordModel : userLearnRecordModelList){
-                    StudyTest.testModel(userLearnRecordModel);
-                }
-                for(RhesisModel rhesisModel : rhesisModelList){
-                    StudyTest.testModel(rhesisModel);
-                }
-
-
-
-                return jsonModel;
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-    }
-
-
-//    public class JSONTaskRhesis extends AsyncTask<String, String, List<RhesisModel>> implements Serializable {
+    //    public class JSONTaskRhesis extends AsyncTask<String, String, List<RhesisModel>> implements Serializable {
 //
 //
 //        @Override
@@ -517,5 +414,4 @@ public class StartFragment extends Fragment implements View.OnClickListener {
 //            Log.i(TAG, "首页初始化完毕！");
 //        }
 //    }
-
 }
