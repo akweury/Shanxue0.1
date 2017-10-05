@@ -1,19 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  xmlns:app="http://schemas.android.com/apk/res-auto"
 			  android:orientation="vertical"
 			  android:background="@color/colorWhite"
 			  android:layout_width="match_parent"
 			  android:layout_height="match_parent">
-	<Button android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_weight="1"
-			android:id="@+id/btnTest"
-			android:text="功能页四"/>
-	<TextView android:layout_width="match_parent"
-			  android:layout_height="wrap_content"
-			  android:gravity="center"
-			  android:layout_weight="1"
-			  android:text="该页用于创建词条"/>
+
+	<android.support.design.widget.AppBarLayout
+			android:layout_width="match_parent"
+			android:layout_height="@dimen/head_bar_height"
+			android:background="@color/colorWhite"
+	>
+		<android.support.v7.widget.Toolbar
+				android:id="@+id/createBar"
+				android:layout_height="?attr/actionBarSize"
+				android:layout_width="match_parent"
+				android:background="@color/colorTransparent"
+				app:layout_collapseMode="pin"
+				app:popupTheme="@style/AppTheme.PopupOverlay">
+			<LinearLayout android:layout_width="wrap_content"
+						  android:layout_height="wrap_content"
+						  android:orientation="horizontal"
+			>
+
+
+			</LinearLayout>
+		</android.support.v7.widget.Toolbar>
+
+	</android.support.design.widget.AppBarLayout>
+
+
+	<LinearLayout android:layout_width="match_parent"
+				  android:layout_height="wrap_content"
+				  android:orientation="horizontal"
+	>
+
+		<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical"
+				android:layout_weight="1"
+		>
+
+			<TextView android:layout_width="match_parent"
+					  android:layout_height="wrap_content"
+					  android:text="@string/momo"
+			/>
+			<EditText
+					android:layout_width="match_parent"
+					android:layout_height="100dp"
+					android:inputType="textMultiLine"
+					android:ems="10"
+					android:hint="@string/input_momo"
+					android:id="@+id/etMomoText"/>
+
+
+		</LinearLayout>
+
+
+		<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical"
+				android:layout_weight="1"
+		>
+
+			<TextView android:layout_width="wrap_content"
+					  android:layout_height="wrap_content"
+					  android:text="@string/hint"/>
+			<EditText
+					android:layout_width="match_parent"
+					android:layout_height="100dp"
+					android:inputType="textMultiLine"
+					android:hint="@string/input_hint"
+					android:ems="10"
+					android:id="@+id/etMomoHint"/>
+
+
+		</LinearLayout>
+
+
+	</LinearLayout>
+
+
+
+
+	<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+					xmlns:fab="http://schemas.android.com/apk/res-auto"
+					android:background="@color/colorWhite"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent">
+		<LinearLayout android:layout_width="match_parent"
+					  android:layout_height="wrap_content"
+					  android:orientation="vertical"
+		>
+
+
+			<android.support.v7.widget.RecyclerView
+					android:id="@+id/recycler_view"
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+			<android.support.design.widget.AppBarLayout
+					android:layout_height="wrap_content"
+					android:layout_width="match_parent"
+			/>
+
+
+		</LinearLayout>
+
+		<com.getbase.floatingactionbutton.FloatingActionsMenu
+				android:id="@+id/multiple_actions"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignParentBottom="true"
+				android:layout_alignParentRight="true"
+				android:layout_alignParentEnd="true"
+				fab:fab_addButtonColorNormal="@color/white"
+				fab:fab_addButtonColorPressed="@color/white_pressed"
+				fab:fab_addButtonPlusIconColor="@color/half_black"
+				fab:fab_labelStyle="@style/menu_labels_style"
+				android:layout_marginBottom="16dp"
+				android:layout_marginRight="16dp"
+				android:layout_marginEnd="16dp">
+
+			<!--<com.getbase.floatingactionbutton.FloatingActionButton-->
+					<!--android:id="@+id/btnAddMomo"-->
+					<!--android:layout_width="wrap_content"-->
+					<!--android:layout_height="wrap_content"-->
+					<!--fab:fab_title="Add Momo"-->
+					<!--app:backgroundTint="@color/colorOrange"-->
+					<!--android:src="@drawable/ic_add_circle"-->
+
+			<!--/>-->
+
+			<!--<com.getbase.floatingactionbutton.FloatingActionButton-->
+					<!--android:id="@+id/btnAddNode"-->
+					<!--android:layout_width="wrap_content"-->
+					<!--android:layout_height="wrap_content"-->
+					<!--fab:fab_title="Action with a very long name that won\'t fit on the screen"-->
+					<!--android:src="@drawable/ic_timelapse"/>-->
+
+		</com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+	</RelativeLayout>
+
+
 
 
 </LinearLayout>

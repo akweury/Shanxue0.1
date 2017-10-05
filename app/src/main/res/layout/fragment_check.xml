@@ -41,7 +41,7 @@
 
 	<Button android:layout_width="match_parent"
 			android:layout_height="50dp"
-			android:text="提示"
+			android:text="send"
 			android:id="@+id/btnSendValue"
 			android:background="@color/colorPrimary"
 			android:textColor="@android:color/background_light"

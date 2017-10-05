@@ -116,4 +116,11 @@
 		"when a user tries to pick up one of cards.\n\n"
 	</string>
 	<string name="action_settings">Settings</string>
+	<string name="momo">momo:</string>
+	<string name="hint">hint:</string>
+	<string name="input_momo">input momo...</string>
+	<string name="add">add</string>
+	<string name="input_hint">input_hint...</string>
+	<string name="item_card_update">修改</string>
+	<string name="item_card_delete">删除</string>
 </resources>

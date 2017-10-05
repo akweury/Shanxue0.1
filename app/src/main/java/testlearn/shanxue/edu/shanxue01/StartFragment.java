@@ -1,7 +1,9 @@
 package testlearn.shanxue.edu.shanxue01;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -21,23 +23,26 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class StartFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = "StartFragment";
 
     private int surplus;
     private ProgressDialog dialog;
     private Intent intentActivity;
+    private List<StudyNodeModel> studyNodeModelList = new ArrayList<StudyNodeModel>();
     private boolean hasClicked = false;
+    private boolean hasClear = false;
+    private boolean hasError = false;
+    private String json_learn;
 
     public JsonModel jsonModel;
     public List<RhesisModel> rhesisModelList;
     public UserInfoModle userInfoModle;
     public List<UserLearnRecordModel> userLearnRecordModelList;
 
-    private List<StudyNodeModel> studyNodeModelList = new ArrayList<StudyNodeModel>();
-    private boolean hasClear = false;
 
-    private String json_learn;
 
 
     @Override
@@ -127,6 +132,12 @@ public class StartFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onResponse(String data) {
                 json_learn = data;
+                if(json_learn.contains("No such file or directory")){
+
+                    Toast.makeText(getActivity(),"Database has some problems!",Toast.LENGTH_SHORT).show();
+                    hasError = true;
+                    return;
+                }
                 setData();
             }
         });
@@ -143,19 +154,39 @@ public class StartFragment extends Fragment implements View.OnClickListener {
             userInfoModle = jsonModel.getUserInfoModle();
             rhesisModelList = jsonModel.getRhesisModelList();
             userLearnRecordModelList = jsonModel.getUserLearnRecordModelList();
-
-
+            if (rhesisModelList != null) {
+                surplus = rhesisModelList.size();
+            }else {
+                Toast.makeText(getActivity(),"0 rhesis!",Toast.LENGTH_SHORT).show();
+            }
         }else{
             Toast.makeText(getActivity(),"get learn record failed!",Toast.LENGTH_SHORT).show();
             Log.i(TAG,"can't get json from internet...");
-
         }
+
+
+        //获取SharedPreferences对象
+        Context ct = getActivity();
+        SharedPreferences sp = ct.getSharedPreferences("user", MODE_PRIVATE);
+        //存入数据
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("nickname", userInfoModle.getNickName());
+        editor.putString("ID", userInfoModle.getID());
+        editor.apply();
+
+        //返回STRING_KEY的值，定义key值错误或者此key无对应value值的话返回""
+        Log.d("look_sharePre", sp.getString("nickname", ""));
+        //如果OTHER_KEY不存在，定义key值错误或者此key无对应value值的返回值为"other"
+        Log.d("look_sharePre", sp.getString("ID", "other"));
+
+
 
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
 
 
 
@@ -203,56 +234,53 @@ public class StartFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
 
-        StudyTest.textNextTimeLearnRecordList(userLearnRecordModelList);
+        if (!hasError){
 
+            StudyTest.textNextTimeLearnRecordList(userLearnRecordModelList);
 
-        if (hasClicked){
-            Log.i(TAG,"重新生成intentActivity");
+            if (hasClicked){
+                Log.i(TAG,"重新生成intentActivity");
 
-            intentActivity = new Intent(getActivity(), InStudy.class);
-
-            initFileForce();
-        }
-        switch (view.getId()) {
-            case R.id.btn2StartStudy:
-                Log.i(TAG, "Start study: onClick 点击开始学习！");
-                //https://stackoverflow.com/questions/3818745/androidruntime-error-parcel-unable-to-marshal-value
-                Log.i(TAG, "开始读取信息...");
+                intentActivity = new Intent(getActivity(), InStudy.class);
 
                 initFileForce();
+            }
 
-                if (rhesisModelList != null && userInfoModle.getNickName() != null && userLearnRecordModelList.get(0).getStudy_nextDateTime() != null) {
-                    Log.i(TAG, "学习--所需信息检查正常");
-                }
+            switch (view.getId()) {
+                case R.id.btn2StartStudy:
+                    Log.i(TAG, "Start study: onClick 点击开始学习！");
+                    //https://stackoverflow.com/questions/3818745/androidruntime-error-parcel-unable-to-marshal-value
+                    Log.i(TAG, "开始读取信息...");
 
-                if (rhesisModelList != null) {
-                    surplus = rhesisModelList.size();
-                }else {
-                    Toast.makeText(getActivity(),"0 rhesis!",Toast.LENGTH_SHORT).show();
-                }
+                    initFileForce();
 
-                Log.i(TAG,"userLearnRecordModelList size is: " + userLearnRecordModelList.size());
-                Log.i(TAG,"rhesisModelList size is: " + rhesisModelList.size());
+                    test();
 
-                merge2StudyNodeModel();
+                    merge2StudyNodeModel();
 
-                StudyTest.testModelList(userInfoModle,studyNodeModelList,surplus);
-                Log.i(TAG,"study_id check----------" + studyNodeModelList.get(0).getStudy_ID());
+                    StudyTest.testModelList(userInfoModle,studyNodeModelList,surplus);
+                    Log.i(TAG,"study_id check----------" + studyNodeModelList.get(0).getStudy_ID());
 
-                Bundle bundle = new Bundle();
-                bundle.putInt("surplus", surplus);
-                bundle.putSerializable("userinfo", userInfoModle);
-                bundle.putSerializable("studyNodeList", (ArrayList) studyNodeModelList);
-                intentActivity.putExtras(bundle);
-                Log.i(TAG, "词条信息打包完毕！");
-                Log.i(TAG, "发送!");
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("surplus", surplus);
+                    bundle.putSerializable("userinfo", userInfoModle);
+                    bundle.putSerializable("studyNodeList", (ArrayList) studyNodeModelList);
+                    intentActivity.putExtras(bundle);
+                    Log.i(TAG, "词条信息打包完毕！发送!");
 
-                startActivity(intentActivity);
+                    startActivity(intentActivity);
 
-                hasClicked = true;
-                break;
+                    hasClicked = true;
+                    break;
+            }
+        }else{
+            Toast.makeText(getActivity(),"Data load failed!",Toast.LENGTH_SHORT).show();
         }
+    }
 
+    private void test() {
+        Log.i(TAG,"userLearnRecordModelList size is: " + userLearnRecordModelList.size());
+        Log.i(TAG,"rhesisModelList size is: " + rhesisModelList.size());
 
     }
 
@@ -296,9 +324,6 @@ public class StartFragment extends Fragment implements View.OnClickListener {
         Log.i(TAG, "词条与学习信息合并成功！");
 
     }
-
-
-
 
     //    public class JSONTaskRhesis extends AsyncTask<String, String, List<RhesisModel>> implements Serializable {
 //

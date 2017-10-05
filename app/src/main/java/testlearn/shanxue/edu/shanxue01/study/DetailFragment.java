@@ -27,23 +27,10 @@ import java.util.List;
 
 public class DetailFragment extends Fragment implements Serializable, View.OnClickListener {
     private static final String TAG = "DetialFragment";
-    private TextView tvDetialSurplusEntry;
-    private TextView tvDetialEntryNode;
-    private TextView tvRhesisTitle;
-    private TextView tvRhesisTransiation;
-    private TextView tvRhesisComment;
-    private TextView tvRhesisAppreciate;
-    private TextView tvRhesisAuthor;
-    private TextView tvRhesisDynasty;
-    private Button btnNext;
 
     private int surplus;
     private List<StudyNodeModel> studyNodeModelList;
     private List<UserLearnRecordModel> userLearnRecordModelList = new ArrayList<UserLearnRecordModel>();
-
-
-    private String[] textSplit;
-    private LinearLayout linearLayout;
 
     public DetailFragment(){
 
@@ -83,27 +70,26 @@ public class DetailFragment extends Fragment implements Serializable, View.OnCli
     }
 
     private void displayData(View rootView) {
-        tvDetialSurplusEntry = rootView.findViewById(R.id.tvDetialSurplusEntry);
-        tvDetialEntryNode = rootView.findViewById(R.id.tvDetialEntryNode);
-        tvRhesisTitle = rootView.findViewById(R.id.tvRhesisTitle);
-        tvRhesisTransiation = rootView.findViewById(R.id.tvRhesisTransiation);
-        tvRhesisComment = rootView.findViewById(R.id.tvRhesisComment);
-        tvRhesisAppreciate = rootView.findViewById(R.id.tvRhesisAppreciate);
-        tvRhesisAuthor = rootView.findViewById(R.id.tvRhesisAuthor);
-        tvRhesisDynasty = rootView.findViewById(R.id.tvRhesisDynasty);
-        btnNext = rootView.findViewById(R.id.btnNext);
+        TextView tvDetialSurplusEntry = rootView.findViewById(R.id.tvDetialSurplusEntry);
+        TextView tvDetialEntryNode = rootView.findViewById(R.id.tvDetialEntryNode);
+        TextView tvRhesisTitle = rootView.findViewById(R.id.tvRhesisTitle);
+        TextView tvRhesisTransiation = rootView.findViewById(R.id.tvRhesisTransiation);
+        TextView tvRhesisComment = rootView.findViewById(R.id.tvRhesisComment);
+        TextView tvRhesisAppreciate = rootView.findViewById(R.id.tvRhesisAppreciate);
+        TextView tvRhesisAuthor = rootView.findViewById(R.id.tvRhesisAuthor);
+        TextView tvRhesisDynasty = rootView.findViewById(R.id.tvRhesisDynasty);
+        Button btnNext = rootView.findViewById(R.id.btnNext);
 
         String entryNodeStr = "当前节点: " + String.valueOf(studyNodeModelList.get(surplus).getStudy_node());
         tvDetialEntryNode.setText(entryNodeStr);
         String surplusStr = "剩余词条: " + String.valueOf(surplus);
         tvDetialSurplusEntry.setText(surplusStr);
 
-        linearLayout = (LinearLayout)rootView.findViewById(R.id.llDetialText);
+        LinearLayout linearLayout = (LinearLayout) rootView.findViewById(R.id.llDetialText);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(850,LinearLayout.LayoutParams.WRAP_CONTENT);
 
 
-
-        textSplit = studyNodeModelList.get(surplus).getRhesis_text().split("((?<=。)|(?<=？)|(?<=！)|(?=\n)|(?=\r))");
+        String[] textSplit = studyNodeModelList.get(surplus).getRhesis_text().split("((?<=。)|(?<=？)|(?<=！)|(?=\n)|(?=\r))");
         //remove null
         List<String> list = new ArrayList<String>();
         for (String string : textSplit){
@@ -113,13 +99,13 @@ public class DetailFragment extends Fragment implements Serializable, View.OnCli
             }
         }
 
-        for(int i = 0;i<textSplit.length;i++){
+        for(int i = 0; i< textSplit.length; i++){
             Log.i(TAG,"去掉空值前，一句分别为: " + textSplit[i]);
         }
 
         textSplit = list.toArray(new String[list.size()]);
 
-        for(int i = 0;i<textSplit.length;i++){
+        for(int i = 0; i< textSplit.length; i++){
             Log.i(TAG,"去掉空值后，一句分别为: " + textSplit[i]);
         }
         Resources resources = getContext().getResources();
@@ -128,7 +114,7 @@ public class DetailFragment extends Fragment implements Serializable, View.OnCli
         sentence = sentence.replace("\n","").replace("\r","");
         Log.i(TAG,"名句为: " + sentence);
 
-        for (int i = 0;i<textSplit.length;i++){
+        for (int i = 0; i< textSplit.length; i++){
             TextView a = new TextView(getActivity());
             a.setTextSize(17);
             a.setGravity(Gravity.CENTER);

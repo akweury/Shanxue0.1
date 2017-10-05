@@ -14,53 +14,6 @@
 					android:id="@+id/relLayout">
 
 
-		<!--<RelativeLayout-->
-		<!--android:layout_width="match_parent"-->
-		<!--android:layout_height="match_parent"-->
-		<!--android:layout_above="@id/bottomBar"-->
-		<!--android:id="@+id/chartContainers">-->
-
-		<!--<RelativeLayout android:layout_width="match_parent"-->
-		<!--android:id="@+id/relLayoutTopBar"-->
-		<!--android:layout_height="50dp"-->
-		<!--android:layout_alignParentTop="true">-->
-
-		<!--<android.support.design.widget.AppBarLayout-->
-		<!--android:layout_width="match_parent"-->
-		<!--android:layout_height="wrap_content">-->
-		<!--<android.support.design.widget.TabLayout-->
-		<!--android:layout_width="match_parent"-->
-		<!--android:layout_height="wrap_content"-->
-		<!--android:background="@drawable/white_grey_border_bottom"-->
-		<!--android:id="@+id/tabs">-->
-
-
-		<!--</android.support.design.widget.TabLayout>-->
-
-		<!--</android.support.design.widget.AppBarLayout>-->
-
-		<!--</RelativeLayout>-->
-
-
-		<!--<RelativeLayout android:layout_width="match_parent"-->
-		<!--android:id="@+id/relLayoutMiddle"-->
-		<!--android:layout_height="match_parent"-->
-		<!--android:layout_below="@id/relLayoutTopBar"-->
-		<!--android:layout_alignParentBottom="true">-->
-
-		<!--<android.support.v4.view.ViewPager-->
-		<!--android:layout_width="match_parent"-->
-		<!--android:id="@+id/chartContainer"-->
-		<!--android:layout_height="match_parent">-->
-
-
-		<!--</android.support.v4.view.ViewPager>-->
-
-		<!--</RelativeLayout>-->
-
-
-		<!--</RelativeLayout>-->
-
 
 		<RelativeLayout
 				android:layout_width="match_parent"
@@ -96,6 +49,7 @@
 					android:layout_height="match_parent"
 					android:id="@+id/bottomNavView_Bar"
 					app:menu="@menu/bottom_navigation_menu"
+					android:layout_alignParentBottom="true"
 					android:background="@drawable/white_grey_border_top">
 
 			</android.support.design.widget.BottomNavigationView>
