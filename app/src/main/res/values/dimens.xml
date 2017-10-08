@@ -9,4 +9,6 @@
 	<dimen name="fab_size">56dp</dimen>
 	<dimen name="start_z">2dp</dimen>
 	<dimen name="end_z">5dp</dimen>
+	<dimen name="cardview_aline_top">10dp</dimen>
+	<dimen name="cardview_aline_left">320dp</dimen>
 </resources>

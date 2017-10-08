@@ -1,5 +1,6 @@
 package testlearn.shanxue.edu.shanxue01.study;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import testlearn.shanxue.edu.shanxue01.R;
 import testlearn.shanxue.edu.shanxue01.control.DataUtil;
 import testlearn.shanxue.edu.shanxue01.control.FileUtil;
+import testlearn.shanxue.edu.shanxue01.control.OnDataResponseListener;
 import testlearn.shanxue.edu.shanxue01.models.StudyNodeModel;
 import testlearn.shanxue.edu.shanxue01.models.UserLearnRecordModel;
 
@@ -31,29 +33,26 @@ public class DetailFragment extends Fragment implements Serializable, View.OnCli
     private int surplus;
     private List<StudyNodeModel> studyNodeModelList;
     private List<UserLearnRecordModel> userLearnRecordModelList = new ArrayList<UserLearnRecordModel>();
+    private String entryType;
+    private OnDataResponseListener mListener;
 
-    public DetailFragment(){
+    public DetailFragment() {
 
     }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(TAG,"DetailFragment onCreate");
-
-
+        Log.i(TAG, "DetailFragment onCreate");
         receiveData();
-
     }
-
 
 
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-
-        final View rootView = inflater.inflate(R.layout.activity_study_fragment,container,false);
-        Log.i(TAG,"DetailFragment onCreatView");
+        final View rootView = inflater.inflate(R.layout.activity_study_fragment, container, false);
+        Log.i(TAG, "DetailFragment onCreatView");
 
         displayData(rootView);
 
@@ -86,52 +85,52 @@ public class DetailFragment extends Fragment implements Serializable, View.OnCli
         tvDetialSurplusEntry.setText(surplusStr);
 
         LinearLayout linearLayout = (LinearLayout) rootView.findViewById(R.id.llDetialText);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(850,LinearLayout.LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(850, LinearLayout.LayoutParams.WRAP_CONTENT);
 
 
         String[] textSplit = studyNodeModelList.get(surplus).getRhesis_text().split("((?<=。)|(?<=？)|(?<=！)|(?=\n)|(?=\r))");
         //remove null
         List<String> list = new ArrayList<String>();
-        for (String string : textSplit){
-            if(string !=null && string.length()>0 && !string.contains("\\n")){
+        for (String string : textSplit) {
+            if (string != null && string.length() > 0 && !string.contains("\\n")) {
 
                 list.add(string);
             }
         }
 
-        for(int i = 0; i< textSplit.length; i++){
-            Log.i(TAG,"去掉空值前，一句分别为: " + textSplit[i]);
+        for (int i = 0; i < textSplit.length; i++) {
+            Log.i(TAG, "去掉空值前，一句分别为: " + textSplit[i]);
         }
 
         textSplit = list.toArray(new String[list.size()]);
 
-        for(int i = 0; i< textSplit.length; i++){
-            Log.i(TAG,"去掉空值后，一句分别为: " + textSplit[i]);
+        for (int i = 0; i < textSplit.length; i++) {
+            Log.i(TAG, "去掉空值后，一句分别为: " + textSplit[i]);
         }
         Resources resources = getContext().getResources();
 
         String sentence = studyNodeModelList.get(surplus).getRhesis_sentance();
-        sentence = sentence.replace("\n","").replace("\r","");
-        Log.i(TAG,"名句为: " + sentence);
+        sentence = sentence.replace("\n", "").replace("\r", "");
+        Log.i(TAG, "名句为: " + sentence);
 
-        for (int i = 0; i< textSplit.length; i++){
+        for (int i = 0; i < textSplit.length; i++) {
             TextView a = new TextView(getActivity());
             a.setTextSize(17);
             a.setGravity(Gravity.CENTER);
             a.setScaleX((float) 1.1);
             a.setText(textSplit[i] + "\n");
             a.setId(i);
-            if(textSplit[i].contains(sentence)){
+            if (textSplit[i].contains(sentence)) {
                 a.setTextColor(resources.getColorStateList(R.color.colorPink));
-            }else{
+            } else {
                 a.setTextColor(resources.getColorStateList(R.color.colorBlack));
             }
             linearLayout.addView(a);
 
         }
 
-        Log.i(TAG,"rhesis Transiation: " + studyNodeModelList.get(surplus).getRhesis_transiation());
-        Log.i(TAG,"rhesis text: " + studyNodeModelList.get(surplus).getRhesis_text());
+        Log.i(TAG, "rhesis Transiation: " + studyNodeModelList.get(surplus).getRhesis_transiation());
+        Log.i(TAG, "rhesis text: " + studyNodeModelList.get(surplus).getRhesis_text());
 
         tvRhesisTitle.setText(studyNodeModelList.get(surplus).getRhesis_title());
         tvRhesisDynasty.setText(studyNodeModelList.get(surplus).getRhesis_dynasty());
@@ -145,22 +144,21 @@ public class DetailFragment extends Fragment implements Serializable, View.OnCli
 
 
     private void receiveData() {
-
-//        lvEntry = (ListView)getActivity().findViewById(R.id.lvEntry);
         Bundle bundle = getArguments();
-        if (bundle!=null){
+        if (bundle != null) {
             surplus = bundle.getInt("surplus");
-            studyNodeModelList = (List<StudyNodeModel>)bundle.getSerializable("studyNodeList");
-            Log.i(TAG,"surplus is " + surplus);
-            Log.i(TAG,"this rhesis title: " + studyNodeModelList.get(surplus).getRhesis_title());
-        }else{
-            Log.i(TAG,"surplus is null");
+            studyNodeModelList = (List<StudyNodeModel>) bundle.getSerializable("studyList");
+
+            Log.i(TAG, "surplus is " + surplus);
+            Log.i(TAG, "this rhesis title: " + studyNodeModelList.get(surplus).getRhesis_title());
+        } else {
+            Log.i(TAG, "surplus is null");
         }
     }
 
     @Override
     public void onStart() {
-        Log.i(TAG,"DetailFragment onStart");
+        Log.i(TAG, "DetailFragment onStart");
         super.onStart();
 
     }
@@ -168,21 +166,21 @@ public class DetailFragment extends Fragment implements Serializable, View.OnCli
     @Override
     public void onPause() {
         super.onPause();
-        Log.i(TAG,"DetailFragment onPause");
+        Log.i(TAG, "DetailFragment onPause");
 
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.i(TAG,"DetailFragment onResume");
+        Log.i(TAG, "DetailFragment onResume");
 
     }
 
     @Override
     public void onClick(View view) {
         //https://stackoverflow.com/questions/1504160/android-use-a-switch-statement-with-setonclicklistener-onclick-for-more-than-1
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.btnNext:
                 continueStudy();
                 break;
@@ -194,16 +192,14 @@ public class DetailFragment extends Fragment implements Serializable, View.OnCli
 
     private void finishDetailFragment() {
         //https://stackoverflow.com/questions/12659747/call-an-activity-method-from-a-fragment
-        ((InStudy)getActivity()).finishStudy(surplus);
+        ((InStudy) getActivity()).finishStudy(surplus);
     }
 
     private void continueStudy() {
         Log.i(TAG, "点击了按钮--下一个");
 
 
-        Log.i(TAG,"study_id check----------" + studyNodeModelList.get(surplus).getStudy_ID());
-
-
+        Log.i(TAG, "study_id check----------" + studyNodeModelList.get(surplus).getStudy_ID());
 
         CheckFragment checkFragment = new CheckFragment();
         FragmentManager fragmentManager = getFragmentManager();
@@ -211,21 +207,22 @@ public class DetailFragment extends Fragment implements Serializable, View.OnCli
 
         Bundle bundle = new Bundle();
         bundle.putInt("surplus", --surplus);
-        bundle.putSerializable("studyNodeList", (ArrayList) studyNodeModelList);
+        bundle.putSerializable("studyList", (ArrayList) studyNodeModelList);
+
         checkFragment.setArguments(bundle);
         Log.i(TAG, "DetialFragment: surplus is: " + surplus);
 
         if (surplus >= 0) {
 
             String fragmentname = "detail" + String.valueOf(surplus);
-            fragmentTransaction.replace(R.id.in_study,checkFragment);
+            fragmentTransaction.replace(R.id.in_study, checkFragment);
             fragmentTransaction.addToBackStack(fragmentname).commit();
 
         } else {
 
             Log.i(TAG, "从节点对象中提取学习记录...");
 
-            for(int i = 0; i < studyNodeModelList.size(); i++){
+            for (int i = 0; i < studyNodeModelList.size(); i++) {
                 UserLearnRecordModel userLearnRecordModel = new UserLearnRecordModel();
 
                 userLearnRecordModel.setUserLearnRecord(studyNodeModelList.get(i));
@@ -241,21 +238,30 @@ public class DetailFragment extends Fragment implements Serializable, View.OnCli
 
             //back to startstudy.activity
             //https://stackoverflow.com/questions/4038479/android-go-back-to-previous-activity
-            FileUtil.writeObj2File(userLearnRecordModelList,FileUtil.FILE_NAME_UPLOAD_LEARN_RECORD);
-            Log.i(TAG,"上传用户学习记录...");
+            FileUtil.writeObj2File(userLearnRecordModelList, FileUtil.FILE_NAME_UPLOAD_LEARN_RECORD);
+            Log.i(TAG, "上传用户学习记录...");
 
 
-            FileUtil.writeObj2File(userLearnRecordModelList,FileUtil.FILE_NAME_USER_LEARN_RECORD);
+            FileUtil.writeObj2File(userLearnRecordModelList, FileUtil.FILE_NAME_USER_LEARN_RECORD);
 
             String json_LearnRecords = DataUtil.transLearnRecords2Json(userLearnRecordModelList);
 
-            Log.i(TAG,"json_LearnRecords: " + json_LearnRecords);
+            Log.i(TAG, "json_LearnRecords: " + json_LearnRecords);
 
-            DataUtil.sendPost("learn_record",json_LearnRecords,FileUtil.URL_UPLOAD_LEARN_RECORD,getActivity());
+            DataUtil.sendPost("learn_record", json_LearnRecords, FileUtil.URL_UPLOAD_LEARN_RECORD, getActivity());
 
-            getActivity().finish();
+            mListener.onResponse("rhesis");
         }
     }
 
-
+    @Override
+    public void onAttach(Context context) {
+        Log.i(TAG, "onAttach");
+        super.onAttach(context);
+        try {
+            mListener = (OnDataResponseListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + "must implement OnDataResponseListener");
+        }
+    }
 }

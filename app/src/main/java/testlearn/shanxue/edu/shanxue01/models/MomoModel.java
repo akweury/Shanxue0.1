@@ -1,8 +1,15 @@
 package testlearn.shanxue.edu.shanxue01.models;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
-public class MomoModel implements Serializable {
+public class MomoModel extends NodeModel implements Serializable {
+
+    private static final String TAG = "MomoModel";
+    private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+
     private int momo_ID;
     private String momo_type;
     private String momo_label;
@@ -11,11 +18,68 @@ public class MomoModel implements Serializable {
     private String momo_hintMain;
     private String momo_hintOthers;
     private String momo_creator;
-    private String momo_createDateTime;
-    private String momo_updateTime;
-    private String momo_latestStudyTime;
-    private int momo_study_node;
+
+
+
+    private String study_creatorDate;
+    private int study_node;
+    private String study_nextDateTime;
+    private String study_latestStudyTime;
+    private int hasStudyed;
+
     private String momo_log = "log:";
+
+    public static String getTAG() {
+        return TAG;
+    }
+
+    public DateFormat getDateFormat() {
+        return dateFormat;
+    }
+
+    public void setDateFormat(DateFormat dateFormat) {
+        this.dateFormat = dateFormat;
+    }
+
+    public String getStudy_creatorDate() {
+        return study_creatorDate;
+    }
+
+    public void setStudy_creatorDate(String study_creatorDate) {
+        this.study_creatorDate = study_creatorDate;
+    }
+
+    public int getStudy_node() {
+        return study_node;
+    }
+
+    public void setStudy_node(int study_node) {
+        this.study_node = study_node;
+    }
+
+    public String getStudy_nextDateTime() {
+        return study_nextDateTime;
+    }
+
+    public void setStudy_nextDateTime(String study_nextDateTime) {
+        this.study_nextDateTime = study_nextDateTime;
+    }
+
+    public String getStudy_latestStudyTime() {
+        return study_latestStudyTime;
+    }
+
+    public void setStudy_latestStudyTime(String study_latestStudyTime) {
+        this.study_latestStudyTime = study_latestStudyTime;
+    }
+
+    public int getHasStudyed() {
+        return hasStudyed;
+    }
+
+    public void setHasStudyed(int hasStudyed) {
+        this.hasStudyed = hasStudyed;
+    }
 
     public int getMomo_ID() {
         return momo_ID;
@@ -81,38 +145,6 @@ public class MomoModel implements Serializable {
         this.momo_creator = momo_creator;
     }
 
-    public String getMomo_createDateTime() {
-        return momo_createDateTime;
-    }
-
-    public void setMomo_createDateTime(String momo_createDateTime) {
-        this.momo_createDateTime = momo_createDateTime;
-    }
-
-    public String getMomo_updateTime() {
-        return momo_updateTime;
-    }
-
-    public void setMomo_updateTime(String momo_updateTime) {
-        this.momo_updateTime = momo_updateTime;
-    }
-
-    public String getMomo_latestStudyTime() {
-        return momo_latestStudyTime;
-    }
-
-    public void setMomo_latestStudyTime(String momo_latestStudyTime) {
-        this.momo_latestStudyTime = momo_latestStudyTime;
-    }
-
-    public int getMomo_study_node() {
-        return momo_study_node;
-    }
-
-    public void setMomo_study_node(int momo_study_node) {
-        this.momo_study_node = momo_study_node;
-    }
-
     public String getMomo_log() {
         return momo_log;
     }
@@ -120,4 +152,5 @@ public class MomoModel implements Serializable {
     public void setMomo_log(String momo_log) {
         this.momo_log += momo_log + "\n";
     }
+
 }

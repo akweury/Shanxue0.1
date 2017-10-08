@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  xmlns:fab="http://schemas.android.com/apk/res-auto"
+			  android:orientation="vertical"
+			  android:layout_width="match_parent"
+			  android:layout_height="match_parent">
+
+	<EditText
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:inputType="textMultiLine"
+			android:ems="10"
+			android:id="@+id/etWindowMomo"/>
+	<com.getbase.floatingactionbutton.FloatingActionButton
+			android:id="@+id/btn_windowMomo_add"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			fab:fab_icon="@drawable/ic_add_circle"
+			fab:fab_colorNormal="@color/pink"
+			fab:fab_colorPressed="@color/pink_pressed"
+			android:layout_marginBottom="16dp"
+			android:layout_marginRight="16dp"
+			android:layout_marginEnd="16dp"
+			android:layout_alignParentBottom="true"
+			android:layout_alignParentRight="true"
+			android:layout_alignParentEnd="true"
+	/>
+
+</LinearLayout>

@@ -4,66 +4,158 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.Toast;
 import testlearn.shanxue.edu.shanxue01.R;
+import testlearn.shanxue.edu.shanxue01.control.OnDataResponseListener;
+import testlearn.shanxue.edu.shanxue01.models.MomoModel;
 import testlearn.shanxue.edu.shanxue01.models.StudyNodeModel;
 import testlearn.shanxue.edu.shanxue01.models.UserInfoModle;
-import testlearn.shanxue.edu.shanxue01.test.StudyTest;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InStudy extends AppCompatActivity implements Serializable {
+public class InStudy extends AppCompatActivity implements Serializable, OnDataResponseListener {
     private static final String TAG = "InStudy.activity";
     private final static String TAG_FRAGMENT_DETIAL = "TAG_FRAGMENT_DETIAL";
     private final static String TAG_FRAGMENT_CHECK = "TAG_FRAGMENT_CHECK";
     private boolean isCheck;
-    private int surplus=5; //剩余学习词条数量
+    private int nextOrder = 0;
+    private String[] order;
+    private int rhesisSurplus = 0; //剩余rhesis词条数量
+    private int momoSurplus = 0; //剩余momo词条数量
 
+    private String typeOrder;
     private UserInfoModle userInfoModle;
     private List<StudyNodeModel> studyNodeModelList;
+    private List<MomoModel> momoModelList;
+    public static boolean beginType = true;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(TAG,"onCreat");
+        Log.i(TAG, "onCreat");
         setContentView(R.layout.activity_in_study);
 
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        Log.i(TAG,"获取到信息，开始拆包...................................");
+        receiveData();
 
-        Bundle bundleGet = this.getIntent().getExtras();
+        order = typeOrder.split(",");
 
-        userInfoModle = (UserInfoModle) bundleGet.getSerializable("userinfo");
-        studyNodeModelList = (ArrayList)bundleGet.getSerializable("studyNodeList");
 
-        surplus = bundleGet.getInt("surplus");
+        while (!showNextFragment(order[nextOrder])) ;
 
-        StudyTest.testModelList(userInfoModle,studyNodeModelList,surplus);
-
-        Log.i(TAG,"信息获取完毕！");
-
-        isCheck = true;
-        Bundle bundle = new Bundle();
-        bundle.putInt("surplus",--surplus);//minus one before check
-        bundle.putSerializable("studyNodeList",(ArrayList)studyNodeModelList);
-
-        showFragment(bundle,isCheck);
 
     }
 
+    private boolean showNextFragment(String nextOrder) {
+        Log.i(TAG, "order is: " + nextOrder);
+        switch (nextOrder) {
+            case "momo":
+                Log.i(TAG, "momo part-----------------------------");
+                return show("momo");
+            case "rhesis":
+                Log.i(TAG, "rhesis part-----------------------------");
+                return show("rhesis");
+            default:
+                finish();
+                break;
+        }
+        return true;
 
-    private void showFragment(Bundle bundle,Boolean isCheck) {
+    }
+
+    private void receiveData() {
+        Log.i(TAG, "获取到信息，开始拆包...................................");
+
+        Bundle bundleGet = this.getIntent().getExtras();
+        userInfoModle = (UserInfoModle) bundleGet.getSerializable("userinfo");
+        studyNodeModelList = (ArrayList) bundleGet.getSerializable("studyNodeList");
+        momoModelList = (ArrayList) bundleGet.getSerializable("momoList");
+        rhesisSurplus = bundleGet.getInt("rhesisSurplus");
+        momoSurplus = bundleGet.getInt("momoSurplus");
+        typeOrder = bundleGet.getString("typeOrder");
+        if (userInfoModle != null) {
+            Log.i(TAG, "userinfo nickname: " + userInfoModle.getNickName());
+            Log.i(TAG, "momo node list size: " + momoModelList.size());
+            Log.i(TAG, "study node list size: " + studyNodeModelList.size());
+            Log.i(TAG, "rhesis surplus: " + rhesisSurplus);
+            Log.i(TAG, "momo surplus: " + momoSurplus);
+            Log.i(TAG, "type order: " + typeOrder);
+        }
+    }
+
+    private boolean show(String entryType) {
+        switch (entryType) {
+            case "momo":
+                if (!showEntry(momoSurplus, "momo")) {
+                    return false;
+                }
+                break;
+            case "rhesis":
+                if (!showEntry(rhesisSurplus, "rhesis")) {
+                    return false;
+                }
+                break;
+        }
+        return true;
+
+    }
+
+    private boolean showEntry(int surplus, String nodeType) {
+        Log.i(TAG, "(showEntry) surplus: " + surplus);
+        if (surplus == 0) {
+            if (nextOrder < order.length - 1){
+                nextOrder++;
+            }else {
+                Toast.makeText(this,"no entry to study",Toast.LENGTH_SHORT).show();
+                finish();
+            }
+            return false;
+        } else {
+            switch (nodeType) {
+                case "momo":
+                    Log.i(TAG, "showMomo");
+                    isCheck = true;
+                    momoSurplus--;//minus one before check
+                    putInBundle(momoSurplus, (ArrayList) momoModelList);
+                    break;
+                case "rhesis":
+                    Log.i(TAG, "showRhesis");
+                    isCheck = true;
+                    rhesisSurplus--;//minus one before check
+
+                    putInBundle(rhesisSurplus, (ArrayList) studyNodeModelList);
+                    break;
+                default:
+                    break;
+            }
+            return true;
+        }
+
+    }
+
+    private void putInBundle(int surplus, ArrayList studyList) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("surplus", surplus);
+        bundle.putSerializable("studyList", studyList);
+        showFragment(bundle, isCheck);
+
+    }
+
+    private void showFragment(Bundle bundle, Boolean isCheck) {
+
         final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        if (isCheck==true){
+        if (isCheck) {
             final CheckFragment checkFragment = new CheckFragment();
             checkFragment.setArguments(bundle);
             transaction.replace(R.id.in_study, checkFragment, TAG_FRAGMENT_CHECK);
-        }else {
+        } else {
             final DetailFragment detailFragment = new DetailFragment();
             detailFragment.setArguments(bundle);
-            transaction.replace(R.id.in_study, detailFragment,TAG_FRAGMENT_DETIAL);
+            transaction.replace(R.id.in_study, detailFragment, TAG_FRAGMENT_DETIAL);
         }
         transaction.addToBackStack(null);
         transaction.commit();
@@ -75,12 +167,19 @@ public class InStudy extends AppCompatActivity implements Serializable {
 //        final DetailFragment detailFragment = (DetailFragment)getSupportFragmentManager().findFragmentByTag(TAG_FRAGMENT_DETIAL);
 //        if (checkFragment.allowBackPressed()) { // and then you define a method allowBackPressed with the logic to allow back pressed or not
 
-            finishStudy(surplus);
+        finishStudy(rhesisSurplus);
 //        }
     }
 
-    public void finishStudy(int surplus){
+    void finishStudy(int rhesisSurplus) {
         //TODO:write study data to a file
         finish();
+    }
+
+    @Override
+    public void onResponse(String data) {
+        if (!showNextFragment(order[++nextOrder])) {
+            finish();
+        }
     }
 }

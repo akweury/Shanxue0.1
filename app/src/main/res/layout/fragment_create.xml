@@ -48,13 +48,16 @@
 					  android:layout_height="wrap_content"
 					  android:text="@string/momo"
 			/>
-			<EditText
-					android:layout_width="match_parent"
-					android:layout_height="100dp"
-					android:inputType="textMultiLine"
-					android:ems="10"
-					android:hint="@string/input_momo"
-					android:id="@+id/etMomoText"/>
+				<EditText
+						android:layout_width="match_parent"
+						android:layout_height="100dp"
+						android:inputType="textMultiLine"
+						android:ems="10"
+						android:hint="@string/input_momo"
+						android:id="@+id/etMomoText"/>
+
+
+
 
 
 		</LinearLayout>
@@ -70,14 +73,14 @@
 			<TextView android:layout_width="wrap_content"
 					  android:layout_height="wrap_content"
 					  android:text="@string/hint"/>
-			<EditText
-					android:layout_width="match_parent"
-					android:layout_height="100dp"
-					android:inputType="textMultiLine"
-					android:hint="@string/input_hint"
-					android:ems="10"
-					android:id="@+id/etMomoHint"/>
 
+				<EditText
+						android:layout_width="match_parent"
+						android:layout_height="100dp"
+						android:inputType="textMultiLine"
+						android:hint="@string/input_hint"
+						android:ems="10"
+						android:id="@+id/etMomoHint"/>
 
 		</LinearLayout>
 
@@ -104,10 +107,10 @@
 					android:layout_height="match_parent"
 					app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-			<android.support.design.widget.AppBarLayout
-					android:layout_height="wrap_content"
-					android:layout_width="match_parent"
-			/>
+			<!--<android.support.design.widget.AppBarLayout-->
+					<!--android:layout_height="wrap_content"-->
+					<!--android:layout_width="match_parent"-->
+			<!--/>-->
 
 
 		</LinearLayout>

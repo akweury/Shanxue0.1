@@ -2,11 +2,9 @@ package testlearn.shanxue.edu.shanxue01.create;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Bundle;
@@ -20,6 +18,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.*;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
@@ -44,62 +43,28 @@ public class CreateFragment extends Fragment implements View.OnClickListener {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
 
-    MyDBHelper myDBHelper;
-    private SQLiteDatabase dbRead,dbWrite;
+    private MyDBHelper myDBHelper;
+    private SQLiteDatabase dbRead, dbWrite;
     private List<MomoModel> momoModelList = new ArrayList<>();
     private UserInfoModle userInfoModle = new UserInfoModle();
-
-    private boolean flag1 = false;
-
-
+    private Intent intent;
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(TAG,"onCreate");
+        setHasOptionsMenu(true);
+        Log.i(TAG, "onCreate");
 
         myDBHelper = new MyDBHelper(getActivity());
         dbRead = myDBHelper.getReadableDatabase();
         dbWrite = myDBHelper.getWritableDatabase();
 
-        loadMomo2Model();
+        momoModelList = myDBHelper.loadMomo2Model(dbRead,momoModelList);
 
         SharedPreferences preferences = getActivity().getSharedPreferences("user", MODE_PRIVATE);
         userInfoModle.setNickName(preferences.getString("nickname", "no name"));
         userInfoModle.setID(preferences.getString("ID", "0"));
-    }
-
-    private void loadMomo2Model() {
-
-        Cursor cursor = null;
-        cursor = dbRead.query("entry",null,null,null,null,null,null );
-        momoModelList.clear();
-
-        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-
-            MomoModel momoModel = new MomoModel();
-
-            //TODO: momoModel.setMomo_ID(cursor.getPosition()+1);
-            momoModel.setMomo_ID(cursor.getInt(cursor.getColumnIndex(MyDBHelper.ID)));
-            momoModel.setMomo_type(cursor.getString(cursor.getColumnIndex(MyDBHelper.TYPE)));
-            momoModel.setMomo_label(cursor.getString(cursor.getColumnIndex(MyDBHelper.LABEL)));
-            momoModel.setMomo_text(cursor.getString(cursor.getColumnIndex(MyDBHelper.TEXT)));
-            momoModel.setMomo_hintMain(cursor.getString(cursor.getColumnIndex(MyDBHelper.HINT_MAIN)));
-            momoModel.setMomo_study_node(cursor.getInt(cursor.getColumnIndex(MyDBHelper.STUDY_NODE)));
-            momoModel.setMomo_enableFlag(cursor.getInt(cursor.getColumnIndex(MyDBHelper.ENABLE_FLAG)));
-            momoModel.setMomo_hintOthers(cursor.getString(cursor.getColumnIndex(MyDBHelper.HINT_OTHERS)));
-            momoModel.setMomo_creator(cursor.getString(cursor.getColumnIndex(MyDBHelper.CREATOR)));
-            momoModel.setMomo_createDateTime(cursor.getString(cursor.getColumnIndex(MyDBHelper.CREATE_DATETIME)));
-            momoModel.setMomo_updateTime(cursor.getString(cursor.getColumnIndex(MyDBHelper.UPDATE_TIME)));
-            momoModel.setMomo_latestStudyTime(cursor.getString(cursor.getColumnIndex(MyDBHelper.LATEST_STUDY_TIME)));
-            momoModel.setMomo_log(cursor.getString(cursor.getColumnIndex(MyDBHelper.LOG)));
-
-            momoModelList.add(momoModel);
-        }
-        Log.i(TAG,"loadMomo2Model: " + momoModelList.size());
-
-
     }
 
     @Nullable
@@ -108,6 +73,7 @@ public class CreateFragment extends Fragment implements View.OnClickListener {
 
         final View view = inflater.inflate(R.layout.fragment_create, container, false);
         Log.i(TAG, "onCreatView");
+
 
         drawRecyclerView(view);
         drawEditMomo(view);
@@ -120,6 +86,7 @@ public class CreateFragment extends Fragment implements View.OnClickListener {
     private void drawEditMomo(View view) {
         etMomoText = (EditText) view.findViewById(R.id.etMomoText);
         etMomoHint = (EditText) view.findViewById(R.id.etMomoHint);
+
     }
 
     private void drawRecyclerView(final View view) {
@@ -130,6 +97,7 @@ public class CreateFragment extends Fragment implements View.OnClickListener {
         recyclerView.setLayoutManager(layoutManager);
 
         adapter = new RecyclerAdapter() {
+
             @Override
             public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -144,15 +112,25 @@ public class CreateFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onBindViewHolder(final RecyclerAdapter.ViewHolder holder, final int position) {
 
-                holder.itemID.setText( String.valueOf(momoModelList.get(position).getMomo_ID()));
+                holder.itemID.setText(String.valueOf(momoModelList.get(position).getMomo_ID()));
                 holder.itemMomo.setText(momoModelList.get(position).getMomo_text());
                 holder.itemHint.setText(momoModelList.get(position).getMomo_hintMain());
+                holder.ibtnMore.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        showPopup(holder, position);
+                    }
+                });
 
                 CardView cardView = holder.itemView.findViewById(R.id.card_view);
-                if (momoModelList.get(position).getMomo_enableFlag()==1)
+                if (momoModelList.get(position).getMomo_enableFlag() == 1) {
                     cardView.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorLightGreen));
-                else {
+                    holder.tvMomoNode.setText("" + momoModelList.get(position).getStudy_node());
+
+                } else {
                     cardView.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorLightYellow));
+                    holder.tvMomoNode.setText("");
+
                 }
 //                Log.i(TAG,"(init) momo " + position + " enable flag is " + momoModelList.get(position).getMomo_enableFlag());
 
@@ -160,10 +138,10 @@ public class CreateFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void onClick(View v) {
 
-                        switchNode(view,holder,position);
+                        switchNode(view, holder, position);
 //                        Log.i(TAG,"(pressed) momo " + position + " enable flag is " + momoModelList.get(position).getMomo_enableFlag());
 
-                        myDBHelper.update(dbWrite,momoModelList.get(position));
+                        myDBHelper.update(dbWrite, momoModelList.get(position));
                     }
                 });
                 holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -176,11 +154,10 @@ public class CreateFragment extends Fragment implements View.OnClickListener {
                                     public void onClick(DialogInterface dialogInterface, int i) {
 
                                         int itemID = Integer.parseInt(holder.itemID.getText().toString());
-                                        myDBHelper.delete(dbWrite,itemID);
-//                                        dbWrite.delete("entry","_id=?",new String[]{itemID+""});
+                                        myDBHelper.delete(dbWrite, itemID);
                                         refresh();
                                     }
-                                }).setNegativeButton("no",null).show();
+                                }).setNegativeButton("no", null).show();
                         return true;
                     }
                 });
@@ -190,6 +167,35 @@ public class CreateFragment extends Fragment implements View.OnClickListener {
             public int getItemCount() {
                 return momoModelList.size();
             }
+
+            private void showPopup(final RecyclerAdapter.ViewHolder holder, final int position) {
+                View menuItemView = holder.itemView.findViewById(R.id.card_view);
+
+                PopupMenu popupMenu = new PopupMenu(getActivity(), menuItemView);
+                MenuInflater inflater = popupMenu.getMenuInflater();
+
+                inflater.inflate(R.menu.menu_card_momo, popupMenu.getMenu());
+                Log.i(TAG, "position is: " + position);
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        switch (menuItem.getItemId()) {
+                            case R.id.item_card_change:
+                                Toast.makeText(getContext(), "card changed", Toast.LENGTH_SHORT).show();
+                                break;
+                            case R.id.item_card_delete:
+                                myDBHelper.delete(dbWrite,Integer.parseInt(holder.itemID.getText().toString()));
+                                refresh();
+                                break;
+                            default:
+                                return false;
+                        }
+                        return false;
+                    }
+                });
+                popupMenu.show();
+            }
+
         };
 
         recyclerView.setAdapter(adapter);
@@ -201,17 +207,22 @@ public class CreateFragment extends Fragment implements View.OnClickListener {
         FloatingActionButton actionNode = new FloatingActionButton(getActivity());
 
 
-        actionMomo.setTitle("Momo");
+        actionMomo.setTitle("Add");
         actionMomo.setTag("momo");
+        actionMomo.setColorNormal(ContextCompat.getColor(getActivity(), R.color.colorWhite));
+        actionMomo.setColorPressed(ContextCompat.getColor(getActivity(), R.color.colorPrimary));
         actionMomo.setId(1);
-        actionMomo.setIcon(R.drawable.ic_add_circle);
+        actionMomo.setIcon(R.drawable.ic_add);
         actionMomo.setOnClickListener(this);
 
 
-        actionNode.setTitle("Node");
+        actionNode.setTitle("Long Momo");
         actionNode.setTag("node");
+        actionNode.setColorNormal(ContextCompat.getColor(getActivity(), R.color.colorWhite));
+        actionNode.setColorPressed(ContextCompat.getColor(getActivity(), R.color.colorPrimary));
+
         actionNode.setId(2);
-        actionNode.setIcon(R.drawable.ic_timelapse);
+        actionNode.setIcon(R.drawable.ic_create_gray);
         actionNode.setOnClickListener(this);
 
 
@@ -226,24 +237,34 @@ public class CreateFragment extends Fragment implements View.OnClickListener {
     }
 
     private void switchNode(View view, RecyclerAdapter.ViewHolder holder, int position) {
-        if (momoModelList.get(position).getMomo_enableFlag()==0){
+
+        // to Study
+        if (momoModelList.get(position).getMomo_enableFlag() == 0) {
+
             momoModelList.get(position).setMomo_enableFlag(1);
-            CardView cardView =  holder.itemView.findViewById(R.id.card_view);
-            cardView.setCardBackgroundColor(Color.parseColor("#8BC34A"));
+            momoModelList.get(position).setStudy_node(Math.max(0, momoModelList.get(position).getStudy_node()));
+
+            CardView cardView = holder.itemView.findViewById(R.id.card_view);
+            cardView.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorLightGreen));
 
 
-            Log.i(TAG,"Entry " + position + " enable_flag is: " + momoModelList.get(position).getMomo_enableFlag());
+            holder.tvMomoNode.setText("" + momoModelList.get(position).getStudy_node());
+
+            Log.i(TAG, "Entry " + position + " enable_flag is: " + momoModelList.get(position).getMomo_enableFlag());
             Snackbar.make(view, "Entry " + position + " in calcular!",
                     Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
 
-        }else {
+        } else {
+            //out study
             momoModelList.get(position).setMomo_enableFlag(0);
+            momoModelList.get(position).setStudy_node(-1);
 
-            CardView cardView =  holder.itemView.findViewById(R.id.card_view);
-            cardView.setCardBackgroundColor(Color.parseColor("#d2eddf41"));
+            CardView cardView = holder.itemView.findViewById(R.id.card_view);
+            cardView.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorLightYellow));
+            holder.tvMomoNode.setText("");
 
-            Log.i(TAG,"Entry " + position + " enable_flag is: " + momoModelList.get(position).getMomo_enableFlag());
+            Log.i(TAG, "Entry " + position + " enable_flag is: " + momoModelList.get(position).getMomo_enableFlag());
             Snackbar.make(view, "Entry " + position + " out calcular!",
                     Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
@@ -251,53 +272,36 @@ public class CreateFragment extends Fragment implements View.OnClickListener {
         }
 
 
-
     }
+
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+
+        switch (view.getId()) {
 
             case 1:
-                addMomo();
+                myDBHelper.addMomo(view,dbWrite,etMomoText,etMomoHint,node,userInfoModle);
                 refresh();
                 break;
             case 2:
+                addNode();
                 break;
         }
     }
 
-    private void addMomo() {
-        String hint = etMomoHint.getText().toString().trim();
-        String text = etMomoText.getText().toString().trim();
-        if(hint.matches("") && !text.matches("")){
-            etMomoHint.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP);
-            etMomoText.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
-            Toast.makeText(getActivity(),"Please input the hint!",Toast.LENGTH_SHORT).show();
-        }else if(text.matches("")&&!hint.matches("")){
-            etMomoHint.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
-            etMomoText.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP);
-            Toast.makeText(getActivity(),"Please input the Text!",Toast.LENGTH_SHORT).show();
-        }else if(hint.matches("")&&text.matches("")){
-            etMomoText.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP);
-            etMomoHint.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP);
-            Toast.makeText(getActivity(),"Please input the Text&Hint!",Toast.LENGTH_SHORT).show();
-        }else {
-            etMomoHint.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
-            etMomoText.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
 
-            myDBHelper.instert(dbWrite,etMomoText,etMomoHint,node,userInfoModle);
-        }
+    private void addNode() {
+        intent = new Intent(getActivity(), AddNodeActivity.class);
+
+        startActivity(intent);
+
     }
 
     private void refresh() {
-        loadMomo2Model();
+        myDBHelper.loadMomo2Model(dbRead,momoModelList);
         adapter.notifyDataSetChanged();
     }
-
-
-
-
 
 
     @Override
@@ -310,6 +314,16 @@ public class CreateFragment extends Fragment implements View.OnClickListener {
     public void onStart() {
         super.onStart();
         Log.i(TAG, "onStart");
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            if (bundle.getString("text") != null) {
+                String text = bundle.getString("text");
+                myDBHelper.addMomo(dbWrite, text,node,userInfoModle);
+                Log.i(TAG, "text is " + text);
+            }
+        } else {
+            Log.i(TAG, "text is null");
+        }
 
     }
 
@@ -326,49 +340,5 @@ public class CreateFragment extends Fragment implements View.OnClickListener {
         Log.i(TAG, "onStop");
 
 
-    }
-
-//    private void addMomo(SQLiteDatabase dbWrite, EditText etMomoText, EditText etMomoHint, UserInfoModle userInfoModle) {
-//        TimeUtil timeUtil = new TimeUtil();
-//        ContentValues values = new ContentValues();
-//        values.put("_type","");
-//        values.put("_label","");
-//        values.put("_text", this.etMomoText.getText().toString());
-//        values.put("_hint_main", this.etMomoHint.getText().toString());
-//        values.put("_study_node", node);
-//        values.put("_enable_flag", 0);
-//        values.put("_hint_others", "");
-//        values.put("_thecreator", this.userInfoModle.getNickName());
-//        values.put("_create_datetime", timeUtil.getCurrentTime());
-//        values.put("_update_time", timeUtil.getCurrentTime());
-//        values.put("_latestStudyTime", timeUtil.getCurrentTime());
-//        values.put("_mylog", " log: " + timeUtil.getCurrentTime() + "\n");
-//        long result = this.dbWrite.insert("entry",null,values);
-//        if (result == -1) {
-//            Toast.makeText(getActivity(), "Some error occured while inserting", Toast.LENGTH_SHORT).show();
-//        } else {
-//            Toast.makeText(getActivity(), "Data inserted successfully : " + result, Toast.LENGTH_SHORT).show();
-//        }
-//    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        inflater.inflate(R.menu.menu_card_momo, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }

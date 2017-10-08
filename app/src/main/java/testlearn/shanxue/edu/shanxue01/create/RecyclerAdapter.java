@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import testlearn.shanxue.edu.shanxue01.R;
 import testlearn.shanxue.edu.shanxue01.models.MomoModel;
@@ -22,22 +23,26 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     private List<MomoModel> momoModels = new ArrayList<>();
 
-    public RecyclerAdapter() {
+    RecyclerAdapter() {
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{
 
-        public View root;
-        public TextView itemID;
-        public TextView itemMomo;
-        public TextView itemHint;
+        TextView itemID;
+        TextView itemMomo;
+        TextView itemHint;
+        TextView tvMomoNode;
+        ImageButton ibtnMore;
 
 
-        public ViewHolder(final View itemView) {
+        ViewHolder(final View itemView) {
             super(itemView);
-            itemID = (TextView) itemView.findViewById(R.id.item_id);
-            itemMomo = (TextView)itemView.findViewById(R.id.item_momo);
-            itemHint = (TextView)itemView.findViewById(R.id.item_hint);
+            itemID = itemView.findViewById(R.id.item_id);
+            itemMomo = itemView.findViewById(R.id.item_momo);
+            itemHint = itemView.findViewById(R.id.item_hint);
+            tvMomoNode = itemView.findViewById(R.id.tvMomoNode);
+            ibtnMore = itemView.findViewById(R.id.ibtnCardMore);
+
 
 
 
@@ -54,10 +59,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                 }
             });
         }
-
-
-
-
     }
 
     @Override
@@ -65,8 +66,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         View v = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.card_momo, viewGroup, false);
 
-        ViewHolder viewHolder = new ViewHolder(v);
-        return viewHolder;
+        return new ViewHolder(v);
     }
 
     @Override
@@ -84,9 +84,4 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         return momoModels.size();
     }
 
-    public void changeColor(){
-
-
-
-    }
 }

@@ -17,7 +17,7 @@ import testlearn.shanxue.edu.shanxue01.me.MeFragment;
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
-    MenuItem prevMenuItem;
+    private MenuItem prevMenuItem;
     private ViewPager viewPagerBottom;
     private StartFragment startFragment;
     private ChartFragment chartFragment;

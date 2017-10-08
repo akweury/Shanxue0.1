@@ -36,7 +36,9 @@
 					  android:id="@+id/llCheck"
 					  android:gravity="center"
 					  android:layout_weight="4"
-					  android:orientation="vertical"></LinearLayout>
+					  android:orientation="vertical">
+
+		</LinearLayout>
 	</LinearLayout>
 
 	<Button android:layout_width="match_parent"

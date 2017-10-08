@@ -1,6 +1,6 @@
 package testlearn.shanxue.edu.shanxue01.control;
 
-import testlearn.shanxue.edu.shanxue01.models.StudyNodeModel;
+import testlearn.shanxue.edu.shanxue01.models.NodeModel;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -13,11 +13,11 @@ public class NodeUtil {
 
     private static DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
-    public static StudyNodeModel minus(StudyNodeModel studyNodeModel) {
+    public static NodeModel minus(NodeModel nodeModel) {
 
 
         Date date = new Date();
-        int node = studyNodeModel.getStudy_node();
+        int node = nodeModel.getStudy_node();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
 
@@ -44,20 +44,20 @@ public class NodeUtil {
         }
 
         //update study_node
-        studyNodeModel.setStudy_node(node);
+        nodeModel.setStudy_node(node);
         //update study_nextDateTime
         date = calendar.getTime();
-        studyNodeModel.setStudy_nextDateTime(dateFormat.format(date));
+        nodeModel.setStudy_nextDateTime(dateFormat.format(date));
 
 
-        return studyNodeModel;
+        return nodeModel;
     }
 
-    public static StudyNodeModel plus(StudyNodeModel studyNodeModel) {
+    public static NodeModel plus(NodeModel nodeModel) {
 
 
         Date date = new Date();
-        int node = studyNodeModel.getStudy_node();
+        int node = nodeModel.getStudy_node();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
 
@@ -84,12 +84,12 @@ public class NodeUtil {
         }
 
         //update study_node
-        studyNodeModel.setStudy_node(node);
+        nodeModel.setStudy_node(node);
         //update study_nextDateTime
         date = calendar.getTime();
-        studyNodeModel.setStudy_nextDateTime(dateFormat.format(date));
+        nodeModel.setStudy_nextDateTime(dateFormat.format(date));
 
 
-        return studyNodeModel;
+        return nodeModel;
     }
 }
