@@ -14,7 +14,7 @@ public class NodeModel {
     private DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private String study_creatorDate;
-    private int study_node;
+    private static int study_node;
     private String study_nextDateTime;
     private String study_latestStudyTime;
     private int hasStudyed;
@@ -59,7 +59,7 @@ public class NodeModel {
         this.hasStudyed = hasStudyed;
     }
 
-    public void minus(){
+    public void minus() {
         Log.i(TAG, "节点降低!");
         Date date = new Date();
         Log.i(TAG, "更新前，最近学习时间为：" + this.study_latestStudyTime);
@@ -99,4 +99,21 @@ public class NodeModel {
 
     }
 
+    public void zero() {
+        Log.i(TAG, "节点置零！");
+        Date date = new Date();
+        Log.i(TAG, "更新前，最近学习时间为：" + this.study_latestStudyTime);
+        this.study_latestStudyTime = dateFormat.format(date);
+        Log.i(TAG, "更新后，最近学习时间为：" + this.study_latestStudyTime);
+
+        Log.i(TAG, "更新前，学习节点为：" + this.study_node);
+        this.study_node = 0;
+        Log.i(TAG, "更新后，学习节点为：" + this.study_node);
+
+
+        Log.i(TAG, "更新前，下一次学习时间为：" + this.study_nextDateTime);
+        this.study_nextDateTime = dateFormat.format(date);
+        Log.i(TAG, "更新后，下一次学习时间为：" + this.study_nextDateTime);
+        this.hasStudyed = 0;
+    }
 }

@@ -348,6 +348,8 @@ public class StartFragment extends Fragment implements View.OnClickListener {
                     bundle.putSerializable("studyNodeList", (ArrayList) studyNodeModelList);
                     bundle.putSerializable("momoList", (ArrayList) momoModelList);
 
+                    Log.i(TAG,"momoNode nodeis : " + momoModelList.get(0).getStudy_node());
+
                     intentActivity.putExtras(bundle);
 
                     Log.i(TAG, "词条信息打包完毕！发送!");

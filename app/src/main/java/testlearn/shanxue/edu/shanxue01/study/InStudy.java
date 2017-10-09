@@ -26,9 +26,9 @@ public class InStudy extends AppCompatActivity implements Serializable, OnDataRe
     private int momoSurplus = 0; //剩余momo词条数量
 
     private String typeOrder;
-    private UserInfoModle userInfoModle;
-    private List<StudyNodeModel> studyNodeModelList;
-    private List<MomoModel> momoModelList;
+    private UserInfoModle userInfoModle = new UserInfoModle();
+    private List<StudyNodeModel> studyNodeModelList = new ArrayList<>();
+    private List<MomoModel> momoModelList = new ArrayList<>();
     public static boolean beginType = true;
 
 
@@ -74,6 +74,11 @@ public class InStudy extends AppCompatActivity implements Serializable, OnDataRe
         userInfoModle = (UserInfoModle) bundleGet.getSerializable("userinfo");
         studyNodeModelList = (ArrayList) bundleGet.getSerializable("studyNodeList");
         momoModelList = (ArrayList) bundleGet.getSerializable("momoList");
+
+
+        Log.i(TAG,"momoNode nodeisssssss : " + momoModelList.get(0).getStudy_node());
+
+
         rhesisSurplus = bundleGet.getInt("rhesisSurplus");
         momoSurplus = bundleGet.getInt("momoSurplus");
         typeOrder = bundleGet.getString("typeOrder");
@@ -85,6 +90,8 @@ public class InStudy extends AppCompatActivity implements Serializable, OnDataRe
             Log.i(TAG, "momo surplus: " + momoSurplus);
             Log.i(TAG, "type order: " + typeOrder);
         }
+
+
     }
 
     private boolean show(String entryType) {

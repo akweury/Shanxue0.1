@@ -315,48 +315,6 @@ public class StudyNodeModel extends NodeModel implements Serializable {
         this.hasStudyed = 0;
     }
 
-//    public void minus() {
-//
-//        Log.i(TAG, "节点降低!");
-//        Date date = new Date();
-//        Log.i(TAG, "更新前，最近学习时间为：" + this.study_latestStudyTime);
-//        this.study_latestStudyTime = dateFormat.format(date);
-//        Log.i(TAG, "更新后，最近学习时间为：" + this.study_latestStudyTime);
-//
-//        StudyNodeModel studyNodeModel = NodeUtil.minus(this);
-//        Log.i(TAG, "更新前，学习节点为：" + this.study_node);
-//        this.study_node = studyNodeModel.getStudy_node();
-//        Log.i(TAG, "更新后，学习节点为：" + this.study_node);
-//
-//        Log.i(TAG, "更新前，下一次学习时间为：" + this.study_nextDateTime);
-//        this.study_nextDateTime = studyNodeModel.getStudy_nextDateTime();
-//        Log.i(TAG, "更新后，下一次学习时间为：" + this.study_nextDateTime);
-//    }
-
-
-//    public void plus() {
-//        Log.i(TAG, "节点增长！");
-//        Date date = new Date();
-//        Log.i(TAG, "更新前，最近学习时间为：" + this.study_latestStudyTime);
-//        this.study_latestStudyTime = dateFormat.format(date);
-//        Log.i(TAG, "更新后，最近学习时间为：" + this.study_latestStudyTime);
-//
-//        StudyNodeModel studyNodeModel = NodeUtil.plus(this);
-//        Log.i(TAG, "更新前，学习节点为：" + this.study_node);
-//        this.study_node = studyNodeModel.getStudy_node();
-//        Log.i(TAG, "更新后，学习节点为：" + this.study_node);
-//
-//
-//        Log.i(TAG, "更新前，下一次学习时间为：" + this.study_nextDateTime);
-//        this.study_nextDateTime = studyNodeModel.getStudy_nextDateTime();
-//        Log.i(TAG, "更新后，下一次学习时间为：" + this.study_nextDateTime);
-//        if (this.study_node > 6) {
-//            this.hasStudyed = 1;
-//        }
-//
-//    }
-
-
     public void updateUserLearnRecordPart(UserLearnRecordModel userLearnRecordModel) {
         this.study_latestStudyTime = userLearnRecordModel.getStudy_latestStudyTime();
         this.study_nextDateTime = userLearnRecordModel.getStudy_nextDateTime();

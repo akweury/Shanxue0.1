@@ -180,8 +180,20 @@ public class CreateFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         switch (menuItem.getItemId()) {
-                            case R.id.item_card_change:
+                            case R.id.item_card_minus:
+                                momoModelList.get(position).updateMomo(getContext(),0);
                                 Toast.makeText(getContext(), "card changed", Toast.LENGTH_SHORT).show();
+                                refresh();
+                                break;
+                            case R.id.item_card_plus:
+                                momoModelList.get(position).updateMomo(getContext(),1);
+                                Toast.makeText(getContext(), "card changed", Toast.LENGTH_SHORT).show();
+                                refresh();
+                                break;
+                            case R.id.item_card_zero:
+                                momoModelList.get(position).updateMomo(getContext(),2);
+                                Toast.makeText(getContext(), "card changed" + momoModelList.get(position).getStudy_node(), Toast.LENGTH_SHORT).show();
+                                refresh();
                                 break;
                             case R.id.item_card_delete:
                                 myDBHelper.delete(dbWrite,Integer.parseInt(holder.itemID.getText().toString()));
@@ -242,7 +254,7 @@ public class CreateFragment extends Fragment implements View.OnClickListener {
         if (momoModelList.get(position).getMomo_enableFlag() == 0) {
 
             momoModelList.get(position).setMomo_enableFlag(1);
-            momoModelList.get(position).setStudy_node(Math.max(0, momoModelList.get(position).getStudy_node()));
+//            momoModelList.get(position).setStudy_node(Math.max(0, momoModelList.get(position).getStudy_node()));
 
             CardView cardView = holder.itemView.findViewById(R.id.card_view);
             cardView.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorLightGreen));
@@ -258,7 +270,7 @@ public class CreateFragment extends Fragment implements View.OnClickListener {
         } else {
             //out study
             momoModelList.get(position).setMomo_enableFlag(0);
-            momoModelList.get(position).setStudy_node(-1);
+//            momoModelList.get(position).setStudy_node(-1);
 
             CardView cardView = holder.itemView.findViewById(R.id.card_view);
             cardView.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorLightYellow));
@@ -324,6 +336,7 @@ public class CreateFragment extends Fragment implements View.OnClickListener {
         } else {
             Log.i(TAG, "text is null");
         }
+        refresh();
 
     }
 

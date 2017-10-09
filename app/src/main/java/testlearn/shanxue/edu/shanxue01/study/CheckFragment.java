@@ -309,7 +309,7 @@ public class CheckFragment extends Fragment implements Serializable, View.OnClic
                 studyNodeModelList.get(surplus).plus();
             }
             if (entrytype.equals("momo")) {
-                momoModelList.get(surplus).plus();
+                momoModelList.get(surplus).updateMomo(getContext(),1);
             }
             return true;
 
@@ -319,7 +319,7 @@ public class CheckFragment extends Fragment implements Serializable, View.OnClic
                     studyNodeModelList.get(surplus).minus();
                 }
                 if (entrytype.equals("momo")) {
-                    momoModelList.get(surplus).minus();
+                    momoModelList.get(surplus).updateMomo(getContext(),0);
                 }
                 isFirstWrong = false;
             }

@@ -1,5 +1,10 @@
 package testlearn.shanxue.edu.shanxue01.models;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+import testlearn.shanxue.edu.shanxue01.control.MyDBHelper;
+
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -20,14 +25,9 @@ public class MomoModel extends NodeModel implements Serializable {
     private String momo_creator;
 
 
-
-    private String study_creatorDate;
-    private int study_node;
-    private String study_nextDateTime;
-    private String study_latestStudyTime;
-    private int hasStudyed;
-
     private String momo_log = "log:";
+    private MyDBHelper myDBHelper;
+    private SQLiteDatabase dbRead, dbWrite;
 
     public static String getTAG() {
         return TAG;
@@ -39,46 +39,6 @@ public class MomoModel extends NodeModel implements Serializable {
 
     public void setDateFormat(DateFormat dateFormat) {
         this.dateFormat = dateFormat;
-    }
-
-    public String getStudy_creatorDate() {
-        return study_creatorDate;
-    }
-
-    public void setStudy_creatorDate(String study_creatorDate) {
-        this.study_creatorDate = study_creatorDate;
-    }
-
-    public int getStudy_node() {
-        return study_node;
-    }
-
-    public void setStudy_node(int study_node) {
-        this.study_node = study_node;
-    }
-
-    public String getStudy_nextDateTime() {
-        return study_nextDateTime;
-    }
-
-    public void setStudy_nextDateTime(String study_nextDateTime) {
-        this.study_nextDateTime = study_nextDateTime;
-    }
-
-    public String getStudy_latestStudyTime() {
-        return study_latestStudyTime;
-    }
-
-    public void setStudy_latestStudyTime(String study_latestStudyTime) {
-        this.study_latestStudyTime = study_latestStudyTime;
-    }
-
-    public int getHasStudyed() {
-        return hasStudyed;
-    }
-
-    public void setHasStudyed(int hasStudyed) {
-        this.hasStudyed = hasStudyed;
     }
 
     public int getMomo_ID() {
@@ -151,6 +111,33 @@ public class MomoModel extends NodeModel implements Serializable {
 
     public void setMomo_log(String momo_log) {
         this.momo_log += momo_log + "\n";
+    }
+
+
+    /**
+     * Updates the momo information to the Database
+     *
+     * @param i The flag of the node operation,
+     *          0 is minus a node,
+     *          1 is plus a node,
+     *          2 is zero a node.
+     */
+    public void updateMomo(Context context, int i) {
+        if (i == 0) {
+            super.minus();
+        } else if (i == 1) {
+            super.plus();
+        } else if (i == 2) {
+            super.zero();
+        }
+        Log.i(TAG, "updateMomo 最近学习时间为：" + this.getStudy_latestStudyTime());
+        Log.i(TAG, "updateMomo id：" + this.getMomo_ID());
+        Log.i(TAG, "updateMomo node：" + this.getStudy_node());
+
+        myDBHelper = new MyDBHelper(context);
+        dbWrite = myDBHelper.getWritableDatabase();
+        myDBHelper.update(dbWrite, this);
+        myDBHelper.close();
     }
 
 }

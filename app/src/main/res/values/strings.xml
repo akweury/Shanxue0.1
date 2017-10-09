@@ -122,6 +122,8 @@
 	<string name="input_momo">input momo...</string>
 	<string name="add">add</string>
 	<string name="input_hint">input_hint...</string>
-	<string name="item_card_update">修改</string>
-	<string name="item_card_delete">删除</string>
+	<string name="item_card_update_plus">增加节点</string>
+	<string name="item_card_update_minus">减少节点</string>
+	<string name="item_card_update_zero">节点置零</string>
+	<string name="item_card_delete">删除节点</string>
 </resources>
